@@ -60,6 +60,7 @@
         <button onclick="showPage('pilotes', this)" class="nav-btn">Pilotes</button>
         <button onclick="showPage('calendrier', this)" class="nav-btn">Calendrier</button>
         <button onclick="showPage('reglements', this)" class="nav-btn">Règlements</button>
+        <button onclick="showPage('contact', this)" class="nav-btn">Contact</button>
       </div>
       <div class="md:hidden">
         <select onchange="showPage(this.value)" class="rounded-md px-2 py-1 text-black">
@@ -67,6 +68,7 @@
           <option value="pilotes">Pilotes</option>
           <option value="calendrier">Calendrier</option>
           <option value="reglements">Règlements</option>
+          <option value="contact">Contact</option>
         </select>
       </div>
     </div>
@@ -104,6 +106,21 @@
       <div class="mt-4 grid md:grid-cols-2 gap-4">
         <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement sportif</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
         <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement technique</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="hidden-section">
+      <h2 class="text-2xl font-bold mb-4">Contact</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="p-4 border rounded-lg">
+          <h4 class="font-semibold">Organisation</h4>
+          <p>Email: contact@drivex.example</p>
+        </div>
+        <div class="p-4 border rounded-lg">
+          <h4 class="font-semibold">Bureau sportif</h4>
+          <p>Email: sport@drivex.example</p>
+        </div>
       </div>
     </section>
   </main>
