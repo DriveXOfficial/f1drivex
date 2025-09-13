@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  /* RESET GLOBAL : supprime toute marge/padding par défaut */
+  /* RESET GLOBAL */
   * {
     margin: 0;
     padding: 0;
@@ -16,12 +16,15 @@
     width: 100%;
     height: 100%;
     overflow-x: hidden;
-    background: black; /* Sécurité si l'image ne charge pas */
+    background: black;
   }
   body { display: flex; flex-direction: column; min-height: 100vh; }
   main { flex: 1; }
   .hidden-section { display: none; }
   .active-link { font-weight: bold; text-decoration: underline; }
+
+  /* Neutraliser marges des titres */
+  h1, h2, h3, h4, h5, h6 { margin-top: 0; margin-bottom: 0; }
 
   /* PAGE D'ACCUEIL */
   #home-bg {
@@ -37,7 +40,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background-color: rgba(0,0,0,0.5); /* assombrit l'image */
+    background-color: rgba(0,0,0,0.5);
   }
   #home-content {
     position: relative;
@@ -91,7 +94,263 @@
     <section id="home">
       <div id="home-bg">
         <div id="home-content">
-          <h1 class="text-5xl font-extrabold">Bienvenue chez F1 DriveX</h1>
+          <h1 class="text-5xl font-extrabold mt-0">Bienvenue chez F1 DriveX</h1>
+          <p class="mt-4 text-xl max-w-2xl">Plongez au cœur du championnat F1 DriveX, vivez chaque dépassement et chaque podium avec passion et adrénaline.</p>
+          <button onclick="showPage('pilotes')" class="mt-8 px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200">Découvrir les pilotes</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PILOTES -->
+    <section id="pilotes" class="hidden-section">
+      <h2 class="text-2xl font-bold mb-2">Nos Pilotes</h2>
+      <input id="pilotSearch" type="text" placeholder="Rechercher..." class="px-3 py-2 border rounded-md w-full mb-4"/>
+      <div id="pilotList" class="grid md:grid-cols-4 gap-4"></div>
+    </section>
+
+    <!-- CALENDRIER -->
+    <section id="calendrier" class="hidden-section">
+      <h2 class="text-2xl font-bold">Calendrier</h2>
+      <div class="mt-4 grid md:grid-cols-2 gap-4" id="calendarList"></div>
+    </section>
+
+    <!-- REGLEMENTS -->
+    <section id="reglements" class="hidden-section">
+      <h2 class="text-2xl font-bold">Règlements</h2>
+      <div class="mt-4 grid md:grid-cols-2 gap-4">
+        <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement sportif</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+        <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement technique</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="hidden-section">
+      <h2 class="text-2xl font-bold mb-4">Contact</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="p-4 border rounded-lg">
+          <h4 class="font-semibold">Organisation</h4>
+          <p>Email: contact@drivex.example</p>
+        </div>
+        <div class="p-4 border rounded-lg">
+          <h4 class="font-semibold">Bureau sportif</h4>
+          <p>Email: sport@drivex.example</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-auto py-6 bg-black text-white">
+    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm">
+      <div class="flex items-center gap-2">
+        <img src="https://i.postimg.cc/yxGLK36m/3.png" alt="Logo F1 DriveX blanc" class="h-6"/>
+        <span>© <span id="year"></span> F1 DriveX — Association DriveX</span>
+      </div>
+      <div class="flex gap-4">
+        <a href="#">Mentions légales</a>
+        <a href="#">Confidentialité</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL PILOTE -->
+  <div id="pilotModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+    <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- MODAL GRAND PRIX -->
+  <div id="gpModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+    <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+      <button onclick="closeGPModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
+      <div id="gpContent"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // NAVIGATION
+    function showPage(id, btn){
+      document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden-section"));
+      document.getElementById(id).classList.remove("hidden-section");
+      document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active-link"));
+      if(btn) btn.classList.add("active-link");
+    }
+
+    // PILOTES
+    const pilots=[];
+    for(let i=1;i<=20;i++){
+      pilots.push({prenom:"Pilote"+i,nom:"F1DX",ecurie:"Écurie "+i,numero:i,nationalite:"FR",bio:"Bio du pilote "+i,photo:"https://i.pravatar.cc/150?img="+(i+10)});
+    }
+    const pilotList=document.getElementById("pilotList");
+    function renderPilots(){
+      const query=document.getElementById("pilotSearch").value.toLowerCase();
+      pilotList.innerHTML="";
+      pilots.filter(p=>p.prenom.toLowerCase().includes(query)||p.nom.toLowerCase().includes(query)).forEach(p=>{
+        let div=document.createElement("div");
+        div.className="p-4 border rounded-lg bg-white shadow hover:bg-gray-50 cursor-pointer text-center font-semibold";
+        div.textContent=`${p.prenom} ${p.nom}\n${p.ecurie}`;
+        div.onclick=()=>openModal(p);
+        pilotList.appendChild(div);
+      });
+    }
+    document.getElementById("pilotSearch").oninput=renderPilots;
+    renderPilots();
+
+    function openModal(p){
+      const content=document.getElementById("modalContent");
+      content.innerHTML=`
+        <div class="flex gap-4">
+          <img src="${p.photo}" class="w-24 h-24 rounded-full object-cover"/>
+          <div>
+            <h3 class="text-xl font-bold">${p.prenom} ${p.nom}</h3>
+            <p class="text-gray-600">Écurie : ${p.ecurie}</p>
+            <p class="text-gray-600">Numéro : ${p.numero}</p>
+            <p class="text-gray-600">Nationalité : ${p.nationalite}</p>
+          </div>
+        </div>
+        <p class="mt-4 text-sm">${p.bio}</p>
+      `;
+      document.getElementById("pilotModal").classList.remove("hidden");
+      document.getElementById("pilotModal").classList.add("flex");
+    }
+    function closeModal(){document.getElementById("pilotModal").classList.add("hidden");}
+
+    // CALENDRIER
+    const events=[
+      {date:"2025-04-12", title:"Grand Prix de Paris", country:"FR", heure:"14:00", twitch:"https://www.twitch.tv/drivex_off", desc:"Le GP de Paris, course historique sur circuit urbain.", img:"https://upload.wikimedia.org/wikipedia/commons/3/37/Circuit_de_Paris.png"},
+      {date:"2025-06-07", title:"6 Heures de Valence", country:"ES", heure:"16:00", twitch:"https://www.twitch.tv/drivex_off", desc:"Course endurance sur le circuit de Valence.", img:"https://upload.wikimedia.org/wikipedia/commons/a/a1/Circuit_City_Valencia.png"},
+      {date:"2025-09-21", title:"24h de Catalunya", country:"ES", heure:"12:00", twitch:"https://www.twitch.tv/drivex_off", desc:"La célèbre course de 24h sur le circuit de Catalunya.", img:"https://upload.wikimedia.org/wikipedia/commons/0/01/Circuit_Catalunya.png"}
+    ];
+    const cal=document.getElementById("calendarList");
+    events.forEach(e=>{
+      let div=document.createElement("div");
+      div.className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 flex items-center gap-2";
+      div.innerHTML=`<div>${e.title}</div>`;
+      div.onclick=()=>openGPModal(e);
+      cal.appendChild(div);
+    });
+    function openGPModal(e){
+      const flags={FR:'🇫🇷',ES:'🇪🇸'};
+      const content=document.getElementById("gpContent");
+      content.innerHTML=`
+        <h3 class="text-xl font-bold mb-2">${e.title} ${flags[e.country]||''}</h3>
+        <p class="text-gray-600 mb-1"><strong>Date :</strong> ${new Date(e.date).toLocaleDateString("fr-FR")}</p>
+        <p class="text-gray-600 mb-2"><strong>Heure :</strong> ${e.heure} (Paris)</p>
+        <img src="${e.img}" class="w-full h-40 object-cover rounded mb-2"/>
+        <p class="text-gray-600 mb-2">${e.desc}</p>
+        <p><a href="${e.twitch}" target="_blank" class="text-blue-600 font-semibold">🔥 Suivez la course en direct sur DriveX Twitch !</a></p>
+      `;
+      document.getElementById("gpModal").classList.remove("hidden");
+      document.getElementById("gpModal").classList.add("flex");
+    }
+    function closeGPModal(){document.getElementById("gpModal").classList.add("hidden");}
+
+    showPage("home", document.querySelector(".nav-btn"));
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>F1 DriveX — Site officiel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* RESET GLOBAL */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background: black;
+  }
+  body { display: flex; flex-direction: column; min-height: 100vh; }
+  main { flex: 1; }
+  .hidden-section { display: none; }
+  .active-link { font-weight: bold; text-decoration: underline; }
+
+  /* Neutraliser marges des titres */
+  h1, h2, h3, h4, h5, h6 { margin-top: 0; margin-bottom: 0; }
+
+  /* PAGE D'ACCUEIL */
+  #home-bg {
+    background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+  }
+  #home-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0,0,0,0.5);
+  }
+  #home-content {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+  }
+
+  main section { padding-left: 1rem; padding-right: 1rem; margin-top: 2rem; }
+</style>
+</head>
+<body class="bg-white text-black">
+
+  <!-- NAVBAR -->
+  <nav class="w-full bg-black text-white shadow fixed z-20">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://i.postimg.cc/QdTyXmTH/4.png" alt="Logo F1 DriveX" class="h-10"/>
+        <div>
+          <div class="text-lg font-bold">F1 DriveX</div>
+          <div class="text-xs opacity-80">Un Championnat signé DriveX Official</div>
+        </div>
+      </div>
+      <div class="hidden md:flex gap-4">
+        <button onclick="showPage('home', this)" class="nav-btn">Accueil</button>
+        <button onclick="showPage('pilotes', this)" class="nav-btn">Pilotes</button>
+        <button onclick="showPage('calendrier', this)" class="nav-btn">Calendrier</button>
+        <button onclick="showPage('reglements', this)" class="nav-btn">Règlements</button>
+        <button onclick="showPage('contact', this)" class="nav-btn">Contact</button>
+      </div>
+      <div class="md:hidden">
+        <select onchange="showPage(this.value)" class="rounded-md px-2 py-1 text-black">
+          <option value="home">Accueil</option>
+          <option value="pilotes">Pilotes</option>
+          <option value="calendrier">Calendrier</option>
+          <option value="reglements">Règlements</option>
+          <option value="contact">Contact</option>
+        </select>
+      </div>
+    </div>
+  </nav>
+
+  <main class="pt-[70px]">
+
+    <!-- HOME -->
+    <section id="home">
+      <div id="home-bg">
+        <div id="home-content">
+          <h1 class="text-5xl font-extrabold mt-0">Bienvenue chez F1 DriveX</h1>
           <p class="mt-4 text-xl max-w-2xl">Plongez au cœur du championnat F1 DriveX, vivez chaque dépassement et chaque podium avec passion et adrénaline.</p>
           <button onclick="showPage('pilotes')" class="mt-8 px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200">Découvrir les pilotes</button>
         </div>
