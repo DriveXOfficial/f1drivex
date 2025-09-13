@@ -6,507 +6,236 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  /* RESET GLOBAL */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  html, body {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    background: black;
-  }
-  body { display: flex; flex-direction: column; min-height: 100vh; }
-  main { flex: 1; }
-  .hidden-section { display: none; }
-  .active-link { font-weight: bold; text-decoration: underline; }
-
-  /* Neutraliser marges des titres */
-  h1, h2, h3, h4, h5, h6 { margin-top: 0; margin-bottom: 0; }
-
-  /* PAGE D'ACCUEIL */
-  #home-bg {
-    background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    width: 100vw;
-    position: relative;
-  }
-  #home-bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0,0,0,0.5);
-  }
-  #home-content {
-    position: relative;
-    z-index: 10;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-  }
-
-  main section { padding-left: 1rem; padding-right: 1rem; margin-top: 2rem; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; overflow-x:hidden; background:black; }
+  body { display:flex; flex-direction:column; min-height:100vh; }
+  main { flex:1; }
+  .hidden-section { display:none; }
+  .active-link { font-weight:bold; text-decoration:underline; }
+  h1,h2,h3,h4,h5,h6 { margin-top:0; margin-bottom:0; }
+  #home-bg { background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg'); background-size:cover; background-position:center; height:100vh; width:100vw; position:relative; }
+  #home-bg::before { content:""; position:absolute; inset:0; background-color: rgba(0,0,0,0.5);}
+  #home-content { position:relative; z-index:10; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; color:white; }
+  main section { padding-left:1rem; padding-right:1rem; margin-top:2rem; }
 </style>
 </head>
 <body class="bg-white text-black">
 
-  <!-- NAVBAR -->
-  <nav class="w-full bg-black text-white shadow fixed z-20">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="https://i.postimg.cc/QdTyXmTH/4.png" alt="Logo F1 DriveX" class="h-10"/>
-        <div>
-          <div class="text-lg font-bold">F1 DriveX</div>
-          <div class="text-xs opacity-80">Un Championnat signé DriveX Official</div>
-        </div>
-      </div>
-      <div class="hidden md:flex gap-4">
-        <button onclick="showPage('home', this)" class="nav-btn">Accueil</button>
-        <button onclick="showPage('pilotes', this)" class="nav-btn">Pilotes</button>
-        <button onclick="showPage('calendrier', this)" class="nav-btn">Calendrier</button>
-        <button onclick="showPage('reglements', this)" class="nav-btn">Règlements</button>
-        <button onclick="showPage('contact', this)" class="nav-btn">Contact</button>
-      </div>
-      <div class="md:hidden">
-        <select onchange="showPage(this.value)" class="rounded-md px-2 py-1 text-black">
-          <option value="home">Accueil</option>
-          <option value="pilotes">Pilotes</option>
-          <option value="calendrier">Calendrier</option>
-          <option value="reglements">Règlements</option>
-          <option value="contact">Contact</option>
-        </select>
+<!-- NAVBAR -->
+<nav class="w-full bg-black text-white shadow fixed z-20">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://i.postimg.cc/QdTyXmTH/4.png" alt="Logo F1 DriveX" class="h-10"/>
+      <div>
+        <div class="text-lg font-bold">F1 DriveX</div>
+        <div class="text-xs opacity-80">Un Championnat signé DriveX Official</div>
       </div>
     </div>
-  </nav>
-
-  <main class="pt-[70px]">
-
-    <!-- HOME -->
-    <section id="home">
-      <div id="home-bg">
-        <div id="home-content">
-          <h1 class="text-5xl font-extrabold mt-0">Bienvenue chez F1 DriveX</h1>
-          <p class="mt-4 text-xl max-w-2xl">Plongez au cœur du championnat F1 DriveX, vivez chaque dépassement et chaque podium avec passion et adrénaline.</p>
-          <button onclick="showPage('pilotes')" class="mt-8 px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200">Découvrir les pilotes</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- PILOTES -->
-    <section id="pilotes" class="hidden-section">
-      <h2 class="text-2xl font-bold mb-2">Nos Pilotes</h2>
-      <input id="pilotSearch" type="text" placeholder="Rechercher..." class="px-3 py-2 border rounded-md w-full mb-4"/>
-      <div id="pilotList" class="grid md:grid-cols-4 gap-4"></div>
-    </section>
-
-    <!-- CALENDRIER -->
-    <section id="calendrier" class="hidden-section">
-      <h2 class="text-2xl font-bold">Calendrier</h2>
-      <div class="mt-4 grid md:grid-cols-2 gap-4" id="calendarList"></div>
-    </section>
-
-    <!-- REGLEMENTS -->
-    <section id="reglements" class="hidden-section">
-      <h2 class="text-2xl font-bold">Règlements</h2>
-      <div class="mt-4 grid md:grid-cols-2 gap-4">
-        <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement sportif</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
-        <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement technique</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="hidden-section">
-      <h2 class="text-2xl font-bold mb-4">Contact</h2>
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="p-4 border rounded-lg">
-          <h4 class="font-semibold">Organisation</h4>
-          <p>Email: contact@drivex.example</p>
-        </div>
-        <div class="p-4 border rounded-lg">
-          <h4 class="font-semibold">Bureau sportif</h4>
-          <p>Email: sport@drivex.example</p>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="mt-auto py-6 bg-black text-white">
-    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm">
-      <div class="flex items-center gap-2">
-        <img src="https://i.postimg.cc/yxGLK36m/3.png" alt="Logo F1 DriveX blanc" class="h-6"/>
-        <span>© <span id="year"></span> F1 DriveX — Association DriveX</span>
-      </div>
-      <div class="flex gap-4">
-        <a href="#">Mentions légales</a>
-        <a href="#">Confidentialité</a>
-      </div>
+    <div class="hidden md:flex gap-4">
+      <button onclick="showPage('home', this)" class="nav-btn">Accueil</button>
+      <button onclick="showPage('pilotes', this)" class="nav-btn">Pilotes</button>
+      <button onclick="showPage('calendrier', this)" class="nav-btn">Calendrier</button>
+      <button onclick="showPage('reglements', this)" class="nav-btn">Règlements</button>
+      <button onclick="showPage('contact', this)" class="nav-btn">Contact</button>
     </div>
-  </footer>
-
-  <!-- MODAL PILOTE -->
-  <div id="pilotModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
-    <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
-      <button onclick="closeModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
-      <div id="modalContent"></div>
+    <div class="md:hidden">
+      <select onchange="showPage(this.value)" class="rounded-md px-2 py-1 text-black">
+        <option value="home">Accueil</option>
+        <option value="pilotes">Pilotes</option>
+        <option value="calendrier">Calendrier</option>
+        <option value="reglements">Règlements</option>
+        <option value="contact">Contact</option>
+      </select>
     </div>
   </div>
+</nav>
 
-  <!-- MODAL GRAND PRIX -->
-  <div id="gpModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
-    <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
-      <button onclick="closeGPModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
-      <div id="gpContent"></div>
+<main class="pt-[70px]">
+
+  <!-- HOME -->
+  <section id="home">
+    <div id="home-bg">
+      <div id="home-content">
+        <h1 class="text-5xl font-extrabold mt-0">Bienvenue chez F1 DriveX</h1>
+        <p class="mt-4 text-xl max-w-2xl">Plongez au cœur du championnat F1 DriveX 2025, vivez chaque dépassement et chaque podium avec passion et adrénaline.</p>
+        <button onclick="showPage('pilotes')" class="mt-8 px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200">Découvrir les pilotes</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILOTES -->
+  <section id="pilotes" class="hidden-section">
+    <h2 class="text-2xl font-bold mb-2">Nos Pilotes</h2>
+    <input id="pilotSearch" type="text" placeholder="Rechercher..." class="px-3 py-2 border rounded-md w-full mb-4"/>
+    <div id="pilotList" class="grid md:grid-cols-4 gap-4"></div>
+  </section>
+
+  <!-- CALENDRIER -->
+  <section id="calendrier" class="hidden-section">
+    <h2 class="text-2xl font-bold">Calendrier 2025</h2>
+    <div class="mt-4 grid md:grid-cols-2 gap-4" id="calendarList"></div>
+  </section>
+
+  <!-- REGLEMENTS -->
+  <section id="reglements" class="hidden-section">
+    <h2 class="text-2xl font-bold">Règlements</h2>
+    <div class="mt-4 grid md:grid-cols-2 gap-4">
+      <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement sportif</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+      <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement technique</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="hidden-section">
+    <h2 class="text-2xl font-bold mb-4">Contact</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="p-4 border rounded-lg">
+        <h4 class="font-semibold">Organisation</h4>
+        <p>Email: contact@drivex.example</p>
+      </div>
+      <div class="p-4 border rounded-lg">
+        <h4 class="font-semibold">Bureau sportif</h4>
+        <p>Email: sport@drivex.example</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="mt-auto py-6 bg-black text-white">
+  <div class="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm">
+    <div class="flex items-center gap-2">
+      <img src="https://i.postimg.cc/yxGLK36m/3.png" alt="Logo F1 DriveX blanc" class="h-6"/>
+      <span>© <span id="year"></span> F1 DriveX — Association DriveX</span>
+    </div>
+    <div class="flex gap-4">
+      <a href="#">Mentions légales</a>
+      <a href="#">Confidentialité</a>
     </div>
   </div>
+</footer>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    // NAVIGATION
-    function showPage(id, btn){
-      document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden-section"));
-      document.getElementById(id).classList.remove("hidden-section");
-      document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active-link"));
-      if(btn) btn.classList.add("active-link");
-    }
-
-    // PILOTES
-    const pilots=[];
-    for(let i=1;i<=20;i++){
-      pilots.push({prenom:"Pilote"+i,nom:"F1DX",ecurie:"Écurie "+i,numero:i,nationalite:"FR",bio:"Bio du pilote "+i,photo:"https://i.pravatar.cc/150?img="+(i+10)});
-    }
-    const pilotList=document.getElementById("pilotList");
-    function renderPilots(){
-      const query=document.getElementById("pilotSearch").value.toLowerCase();
-      pilotList.innerHTML="";
-      pilots.filter(p=>p.prenom.toLowerCase().includes(query)||p.nom.toLowerCase().includes(query)).forEach(p=>{
-        let div=document.createElement("div");
-        div.className="p-4 border rounded-lg bg-white shadow hover:bg-gray-50 cursor-pointer text-center font-semibold";
-        div.textContent=`${p.prenom} ${p.nom}\n${p.ecurie}`;
-        div.onclick=()=>openModal(p);
-        pilotList.appendChild(div);
-      });
-    }
-    document.getElementById("pilotSearch").oninput=renderPilots;
-    renderPilots();
-
-    function openModal(p){
-      const content=document.getElementById("modalContent");
-      content.innerHTML=`
-        <div class="flex gap-4">
-          <img src="${p.photo}" class="w-24 h-24 rounded-full object-cover"/>
-          <div>
-            <h3 class="text-xl font-bold">${p.prenom} ${p.nom}</h3>
-            <p class="text-gray-600">Écurie : ${p.ecurie}</p>
-            <p class="text-gray-600">Numéro : ${p.numero}</p>
-            <p class="text-gray-600">Nationalité : ${p.nationalite}</p>
-          </div>
-        </div>
-        <p class="mt-4 text-sm">${p.bio}</p>
-      `;
-      document.getElementById("pilotModal").classList.remove("hidden");
-      document.getElementById("pilotModal").classList.add("flex");
-    }
-    function closeModal(){document.getElementById("pilotModal").classList.add("hidden");}
-
-    // CALENDRIER
-    const events=[
-      {date:"2025-04-12", title:"Grand Prix de Paris", country:"FR", heure:"14:00", twitch:"https://www.twitch.tv/drivex_off", desc:"Le GP de Paris, course historique sur circuit urbain.", img:"https://upload.wikimedia.org/wikipedia/commons/3/37/Circuit_de_Paris.png"},
-      {date:"2025-06-07", title:"6 Heures de Valence", country:"ES", heure:"16:00", twitch:"https://www.twitch.tv/drivex_off", desc:"Course endurance sur le circuit de Valence.", img:"https://upload.wikimedia.org/wikipedia/commons/a/a1/Circuit_City_Valencia.png"},
-      {date:"2025-09-21", title:"24h de Catalunya", country:"ES", heure:"12:00", twitch:"https://www.twitch.tv/drivex_off", desc:"La célèbre course de 24h sur le circuit de Catalunya.", img:"https://upload.wikimedia.org/wikipedia/commons/0/01/Circuit_Catalunya.png"}
-    ];
-    const cal=document.getElementById("calendarList");
-    events.forEach(e=>{
-      let div=document.createElement("div");
-      div.className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 flex items-center gap-2";
-      div.innerHTML=`<div>${e.title}</div>`;
-      div.onclick=()=>openGPModal(e);
-      cal.appendChild(div);
-    });
-    function openGPModal(e){
-      const flags={FR:'🇫🇷',ES:'🇪🇸'};
-      const content=document.getElementById("gpContent");
-      content.innerHTML=`
-        <h3 class="text-xl font-bold mb-2">${e.title} ${flags[e.country]||''}</h3>
-        <p class="text-gray-600 mb-1"><strong>Date :</strong> ${new Date(e.date).toLocaleDateString("fr-FR")}</p>
-        <p class="text-gray-600 mb-2"><strong>Heure :</strong> ${e.heure} (Paris)</p>
-        <img src="${e.img}" class="w-full h-40 object-cover rounded mb-2"/>
-        <p class="text-gray-600 mb-2">${e.desc}</p>
-        <p><a href="${e.twitch}" target="_blank" class="text-blue-600 font-semibold">🔥 Suivez la course en direct sur DriveX Twitch !</a></p>
-      `;
-      document.getElementById("gpModal").classList.remove("hidden");
-      document.getElementById("gpModal").classList.add("flex");
-    }
-    function closeGPModal(){document.getElementById("gpModal").classList.add("hidden");}
-
-    showPage("home", document.querySelector(".nav-btn"));
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>F1 DriveX — Site officiel</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  /* RESET GLOBAL */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  html, body {
-    width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    background: black;
-  }
-  body { display: flex; flex-direction: column; min-height: 100vh; }
-  main { flex: 1; }
-  .hidden-section { display: none; }
-  .active-link { font-weight: bold; text-decoration: underline; }
-
-  /* Neutraliser marges des titres */
-  h1, h2, h3, h4, h5, h6 { margin-top: 0; margin-bottom: 0; }
-
-  /* PAGE D'ACCUEIL */
-  #home-bg {
-    background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    width: 100vw;
-    position: relative;
-  }
-  #home-bg::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0,0,0,0.5);
-  }
-  #home-content {
-    position: relative;
-    z-index: 10;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-  }
-
-  main section { padding-left: 1rem; padding-right: 1rem; margin-top: 2rem; }
-</style>
-</head>
-<body class="bg-white text-black">
-
-  <!-- NAVBAR -->
-  <nav class="w-full bg-black text-white shadow fixed z-20">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <img src="https://i.postimg.cc/QdTyXmTH/4.png" alt="Logo F1 DriveX" class="h-10"/>
-        <div>
-          <div class="text-lg font-bold">F1 DriveX</div>
-          <div class="text-xs opacity-80">Un Championnat signé DriveX Official</div>
-        </div>
-      </div>
-      <div class="hidden md:flex gap-4">
-        <button onclick="showPage('home', this)" class="nav-btn">Accueil</button>
-        <button onclick="showPage('pilotes', this)" class="nav-btn">Pilotes</button>
-        <button onclick="showPage('calendrier', this)" class="nav-btn">Calendrier</button>
-        <button onclick="showPage('reglements', this)" class="nav-btn">Règlements</button>
-        <button onclick="showPage('contact', this)" class="nav-btn">Contact</button>
-      </div>
-      <div class="md:hidden">
-        <select onchange="showPage(this.value)" class="rounded-md px-2 py-1 text-black">
-          <option value="home">Accueil</option>
-          <option value="pilotes">Pilotes</option>
-          <option value="calendrier">Calendrier</option>
-          <option value="reglements">Règlements</option>
-          <option value="contact">Contact</option>
-        </select>
-      </div>
-    </div>
-  </nav>
-
-  <main class="pt-[70px]">
-
-    <!-- HOME -->
-    <section id="home">
-      <div id="home-bg">
-        <div id="home-content">
-          <h1 class="text-5xl font-extrabold mt-0">Bienvenue chez F1 DriveX</h1>
-          <p class="mt-4 text-xl max-w-2xl">Plongez au cœur du championnat F1 DriveX, vivez chaque dépassement et chaque podium avec passion et adrénaline.</p>
-          <button onclick="showPage('pilotes')" class="mt-8 px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200">Découvrir les pilotes</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- PILOTES -->
-    <section id="pilotes" class="hidden-section">
-      <h2 class="text-2xl font-bold mb-2">Nos Pilotes</h2>
-      <input id="pilotSearch" type="text" placeholder="Rechercher..." class="px-3 py-2 border rounded-md w-full mb-4"/>
-      <div id="pilotList" class="grid md:grid-cols-4 gap-4"></div>
-    </section>
-
-    <!-- CALENDRIER -->
-    <section id="calendrier" class="hidden-section">
-      <h2 class="text-2xl font-bold">Calendrier</h2>
-      <div class="mt-4 grid md:grid-cols-2 gap-4" id="calendarList"></div>
-    </section>
-
-    <!-- REGLEMENTS -->
-    <section id="reglements" class="hidden-section">
-      <h2 class="text-2xl font-bold">Règlements</h2>
-      <div class="mt-4 grid md:grid-cols-2 gap-4">
-        <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement sportif</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
-        <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement technique</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="hidden-section">
-      <h2 class="text-2xl font-bold mb-4">Contact</h2>
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="p-4 border rounded-lg">
-          <h4 class="font-semibold">Organisation</h4>
-          <p>Email: contact@drivex.example</p>
-        </div>
-        <div class="p-4 border rounded-lg">
-          <h4 class="font-semibold">Bureau sportif</h4>
-          <p>Email: sport@drivex.example</p>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="mt-auto py-6 bg-black text-white">
-    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm">
-      <div class="flex items-center gap-2">
-        <img src="https://i.postimg.cc/yxGLK36m/3.png" alt="Logo F1 DriveX blanc" class="h-6"/>
-        <span>© <span id="year"></span> F1 DriveX — Association DriveX</span>
-      </div>
-      <div class="flex gap-4">
-        <a href="#">Mentions légales</a>
-        <a href="#">Confidentialité</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- MODAL PILOTE -->
-  <div id="pilotModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
-    <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
-      <button onclick="closeModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
-      <div id="modalContent"></div>
-    </div>
+<!-- MODAL PILOTE -->
+<div id="pilotModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+  <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+    <button onclick="closeModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
+    <div id="modalContent"></div>
   </div>
+</div>
 
-  <!-- MODAL GRAND PRIX -->
-  <div id="gpModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
-    <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
-      <button onclick="closeGPModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
-      <div id="gpContent"></div>
-    </div>
+<!-- MODAL GRAND PRIX -->
+<div id="gpModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+  <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+    <button onclick="closeGPModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
+    <div id="gpContent"></div>
   </div>
+</div>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
 
-    // NAVIGATION
-    function showPage(id, btn){
-      document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden-section"));
-      document.getElementById(id).classList.remove("hidden-section");
-      document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active-link"));
-      if(btn) btn.classList.add("active-link");
-    }
+function showPage(id, btn){
+  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden-section"));
+  document.getElementById(id).classList.remove("hidden-section");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active-link"));
+  if(btn) btn.classList.add("active-link");
+}
 
-    // PILOTES
-    const pilots=[];
-    for(let i=1;i<=20;i++){
-      pilots.push({prenom:"Pilote"+i,nom:"F1DX",ecurie:"Écurie "+i,numero:i,nationalite:"FR",bio:"Bio du pilote "+i,photo:"https://i.pravatar.cc/150?img="+(i+10)});
-    }
-    const pilotList=document.getElementById("pilotList");
-    function renderPilots(){
-      const query=document.getElementById("pilotSearch").value.toLowerCase();
-      pilotList.innerHTML="";
-      pilots.filter(p=>p.prenom.toLowerCase().includes(query)||p.nom.toLowerCase().includes(query)).forEach(p=>{
-        let div=document.createElement("div");
-        div.className="p-4 border rounded-lg bg-white shadow hover:bg-gray-50 cursor-pointer text-center font-semibold";
-        div.textContent=`${p.prenom} ${p.nom}\n${p.ecurie}`;
-        div.onclick=()=>openModal(p);
-        pilotList.appendChild(div);
-      });
-    }
-    document.getElementById("pilotSearch").oninput=renderPilots;
-    renderPilots();
+// PILOTES 2025
+const pilots=[
+  {prenom:"Max",nom:"Verstappen",ecurie:"Red Bull Racing",numero:1,nationalite:"NL",bio:"Champion du monde en titre.",photo:"https://upload.wikimedia.org/wikipedia/commons/5/5b/Max_Verstappen_2022_Imola.jpg"},
+  {prenom:"Sergio",nom:"Pérez",ecurie:"Red Bull Racing",numero:11,nationalite:"MX",bio:"Double vainqueur en F1.",photo:"https://upload.wikimedia.org/wikipedia/commons/1/10/Sergio_Perez_2022_Imola.jpg"},
+  {prenom:"Lewis",nom:"Hamilton",ecurie:"Mercedes",numero:44,nationalite:"GB",bio:"7 fois champion du monde.",photo:"https://upload.wikimedia.org/wikipedia/commons/3/3c/Lewis_Hamilton_2022_Spa.jpg"},
+  {prenom:"George",nom:"Russell",ecurie:"Mercedes",numero:63,nationalite:"GB",bio:"Pilote britannique prometteur.",photo:"https://upload.wikimedia.org/wikipedia/commons/f/fc/George_Russell_2022.jpg"},
+  {prenom:"Charles",nom:"Leclerc",ecurie:"Ferrari",numero:16,nationalite:"MC",bio:"Leader de Ferrari.",photo:"https://upload.wikimedia.org/wikipedia/commons/8/88/Charles_Leclerc_2022.jpg"},
+  {prenom:"Carlos",nom:"Sainz",ecurie:"Ferrari",numero:55,nationalite:"ES",bio:"Pilote espagnol talentueux.",photo:"https://upload.wikimedia.org/wikipedia/commons/9/9a/Carlos_Sainz_2022.jpg"},
+  {prenom:"Lando",nom:"Norris",ecurie:"McLaren",numero:4,nationalite:"GB",bio:"Jeune pilote rapide.",photo:"https://upload.wikimedia.org/wikipedia/commons/f/f1/Lando_Norris_2022.jpg"},
+  {prenom:"Oscar",nom:"Piastri",ecurie:"McLaren",numero:81,nationalite:"AU",bio:"Champion F2 2024.",photo:"https://upload.wikimedia.org/wikipedia/commons/f/f5/Oscar_Piastri_2022.jpg"},
+  {prenom:"Esteban",nom:"Ocon",ecurie:"Alpine",numero:31,nationalite:"FR",bio:"Pilote expérimenté.",photo:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Esteban_Ocon_2022.jpg"},
+  {prenom:"Pierre",nom:"Gasly",ecurie:"Alpine",numero:10,nationalite:"FR",bio:"Pilote français rapide.",photo:"https://upload.wikimedia.org/wikipedia/commons/c/c2/Pierre_Gasly_2022.jpg"},
+  {prenom:"Fernando",nom:"Alonso",ecurie:"Aston Martin",numero:14,nationalite:"ES",bio:"Double champion du monde.",photo:"https://upload.wikimedia.org/wikipedia/commons/8/86/Fernando_Alonso_2022.jpg"},
+  {prenom:"Lance",nom:"Stroll",ecurie:"Aston Martin",numero:18,nationalite:"CA",bio:"Pilote canadien.",photo:"https://upload.wikimedia.org/wikipedia/commons/7/78/Lance_Stroll_2022.jpg"},
+  {prenom:"Kevin",nom:"Magnussen",ecurie:"Haas",numero:20,nationalite:"DK",bio:"Pilote danois expérimenté.",photo:"https://upload.wikimedia.org/wikipedia/commons/e/e2/Kevin_Magnussen_2022.jpg"},
+  {prenom:"Nico",nom:"Hülkenberg",ecurie:"Haas",numero:27,nationalite:"DE",bio:"Pilote allemand vétéran.",photo:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Nico_Hulkenberg_2022.jpg"},
+  {prenom:"Yuki",nom:"Tsunoda",ecurie:"AlphaTauri",numero:22,nationalite:"JP",bio:"Pilote japonais.",photo:"https://upload.wikimedia.org/wikipedia/commons/3/3b/Yuki_Tsunoda_2022.jpg"},
+  {prenom:"Nyck",nom:"de Vries",ecurie:"AlphaTauri",numero:21,nationalite:"NL",bio:"Champion F2.",photo:"https://upload.wikimedia.org/wikipedia/commons/7/77/Nyck_de_Vries_2022.jpg"},
+  {prenom:"Valtteri",nom:"Bottas",ecurie:"Alfa Romeo",numero:77,nationalite:"FI",bio:"Pilote finlandais expérimenté.",photo:"https://upload.wikimedia.org/wikipedia/commons/9/9b/Valtteri_Bottas_2022.jpg"},
+  {prenom:"Zhou",nom:"Guanyu",ecurie:"Alfa Romeo",numero:24,nationalite:"CN",bio:"Pilote chinois.",photo:"https://upload.wikimedia.org/wikipedia/commons/6/64/Zhou_Guanyu_2022.jpg"},
+  {prenom:"Logan",nom:"Sargeant",ecurie:"Williams",numero:2,nationalite:"US",bio:"Pilote américain.",photo:"https://upload.wikimedia.org/wikipedia/commons/1/1c/Logan_Sargeant_2022.jpg"},
+  {prenom:"Alexander",nom:"Albon",ecurie:"Williams",numero:23,nationalite:"TH",bio:"Pilote thaïlandais.",photo:"https://upload.wikimedia.org/wikipedia/commons/e/ea/Alexander_Albon_2022.jpg"}
+];
 
-    function openModal(p){
-      const content=document.getElementById("modalContent");
-      content.innerHTML=`
-        <div class="flex gap-4">
-          <img src="${p.photo}" class="w-24 h-24 rounded-full object-cover"/>
-          <div>
-            <h3 class="text-xl font-bold">${p.prenom} ${p.nom}</h3>
-            <p class="text-gray-600">Écurie : ${p.ecurie}</p>
-            <p class="text-gray-600">Numéro : ${p.numero}</p>
-            <p class="text-gray-600">Nationalité : ${p.nationalite}</p>
-          </div>
-        </div>
-        <p class="mt-4 text-sm">${p.bio}</p>
-      `;
-      document.getElementById("pilotModal").classList.remove("hidden");
-      document.getElementById("pilotModal").classList.add("flex");
-    }
-    function closeModal(){document.getElementById("pilotModal").classList.add("hidden");}
+const pilotList=document.getElementById("pilotList");
+function renderPilots(){
+  const query=document.getElementById("pilotSearch").value.toLowerCase();
+  pilotList.innerHTML="";
+  pilots.filter(p=>p.prenom.toLowerCase().includes(query)||p.nom.toLowerCase().includes(query)).forEach(p=>{
+    let div=document.createElement("div");
+    div.className="p-4 border rounded-lg bg-white shadow hover:bg-gray-50 cursor-pointer text-center font-semibold";
+    div.textContent=`${p.prenom} ${p.nom}\n${p.ecurie}`;
+    div.onclick=()=>openModal(p);
+    pilotList.appendChild(div);
+  });
+}
+document.getElementById("pilotSearch").oninput=renderPilots;
+renderPilots();
 
-    // CALENDRIER
-    const events=[
-      {date:"2025-04-12", title:"Grand Prix de Paris", country:"FR", heure:"14:00", twitch:"https://www.twitch.tv/drivex_off", desc:"Le GP de Paris, course historique sur circuit urbain.", img:"https://upload.wikimedia.org/wikipedia/commons/3/37/Circuit_de_Paris.png"},
-      {date:"2025-06-07", title:"6 Heures de Valence", country:"ES", heure:"16:00", twitch:"https://www.twitch.tv/drivex_off", desc:"Course endurance sur le circuit de Valence.", img:"https://upload.wikimedia.org/wikipedia/commons/a/a1/Circuit_City_Valencia.png"},
-      {date:"2025-09-21", title:"24h de Catalunya", country:"ES", heure:"12:00", twitch:"https://www.twitch.tv/drivex_off", desc:"La célèbre course de 24h sur le circuit de Catalunya.", img:"https://upload.wikimedia.org/wikipedia/commons/0/01/Circuit_Catalunya.png"}
-    ];
-    const cal=document.getElementById("calendarList");
-    events.forEach(e=>{
-      let div=document.createElement("div");
-      div.className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 flex items-center gap-2";
-      div.innerHTML=`<div>${e.title}</div>`;
-      div.onclick=()=>openGPModal(e);
-      cal.appendChild(div);
-    });
-    function openGPModal(e){
-      const flags={FR:'🇫🇷',ES:'🇪🇸'};
-      const content=document.getElementById("gpContent");
-      content.innerHTML=`
-        <h3 class="text-xl font-bold mb-2">${e.title} ${flags[e.country]||''}</h3>
-        <p class="text-gray-600 mb-1"><strong>Date :</strong> ${new Date(e.date).toLocaleDateString("fr-FR")}</p>
-        <p class="text-gray-600 mb-2"><strong>Heure :</strong> ${e.heure} (Paris)</p>
-        <img src="${e.img}" class="w-full h-40 object-cover rounded mb-2"/>
-        <p class="text-gray-600 mb-2">${e.desc}</p>
-        <p><a href="${e.twitch}" target="_blank" class="text-blue-600 font-semibold">🔥 Suivez la course en direct sur DriveX Twitch !</a></p>
-      `;
-      document.getElementById("gpModal").classList.remove("hidden");
-      document.getElementById("gpModal").classList.add("flex");
-    }
-    function closeGPModal(){document.getElementById("gpModal").classList.add("hidden");}
+function openModal(p){
+  const content=document.getElementById("modalContent");
+  content.innerHTML=`
+    <div class="flex gap-4">
+      <img src="${p.photo}" class="w-24 h-24 rounded-full object-cover"/>
+      <div>
+        <h3 class="text-xl font-bold">${p.prenom} ${p.nom}</h3>
+        <p class="text-gray-600">Écurie : ${p.ecurie}</p>
+        <p class="text-gray-600">Numéro : ${p.numero}</p>
+        <p class="text-gray-600">Nationalité : ${p.nationalite}</p>
+      </div>
+    </div>
+    <p class="mt-4 text-sm">${p.bio}</p>
+  `;
+  document.getElementById("pilotModal").classList.remove("hidden");
+  document.getElementById("pilotModal").classList.add("flex");
+}
+function closeModal(){document.getElementById("pilotModal").classList.add("hidden");}
 
-    showPage("home", document.querySelector(".nav-btn"));
-  </script>
+// CALENDRIER 2025
+const events=[
+  {date:"2025-03-02", title:"Grand Prix de Bahreïn", country:"BH"},
+  {date:"2025-03-16", title:"Grand Prix d'Arabie Saoudite", country:"SA"},
+  {date:"2025-03-30", title:"Grand Prix d'Australie", country:"AU"},
+  {date:"2025-04-13", title:"Grand Prix d'Azerbaïdjan", country:"AZ"},
+  {date:"2025-04-27", title:"Grand Prix de Miami", country:"US"},
+  {date:"2025-05-11", title:"Grand Prix d'Italie - Imola", country:"IT"},
+  {date:"2025-05-25", title:"Grand Prix d'Espagne", country:"ES"},
+  {date:"2025-06-01", title:"Grand Prix du Canada", country:"CA"},
+  {date:"2025-06-15", title:"Grand Prix d'Autriche", country:"AT"},
+  {date:"2025-06-29", title:"Grand Prix de Grande-Bretagne", country:"GB"},
+  {date:"2025-07-06", title:"Grand Prix de Hongrie", country:"HU"},
+  {date:"2025-07-20", title:"Grand Prix de Belgique", country:"BE"},
+  {date:"2025-08-03", title:"Grand Prix des Pays-Bas", country:"NL"},
+  {date:"2025-08-31", title:"Grand Prix d'Italie - Monza", country:"IT"},
+  {date:"2025-09-07", title:"Grand Prix de Singapour", country:"SG"},
+  {date:"2025-09-21", title:"Grand Prix du Japon", country:"JP"},
+  {date:"2025-10-05", title:"Grand Prix du Qatar", country:"QA"},
+  {date:"2025-10-19", title:"Grand Prix des États-Unis - Austin", country:"US"},
+  {date:"2025-10-26", title:"Grand Prix du Mexique", country:"MX"},
+  {date:"2025-11-09", title:"Grand Prix du Brésil", country:"BR"},
+  {date:"2025-11-23", title:"Grand Prix d'Abou Dhabi", country:"AE"}
+];
+
+const calendarList=document.getElementById("calendarList");
+function renderCalendar(){
+  calendarList.innerHTML="";
+  events.forEach(e=>{
+    let div=document.createElement("div");
+    div.className="p-4 border rounded-lg bg-white shadow hover:bg-gray-50 cursor-pointer";
+    div.innerHTML=`<h4 class="font-semibold">${e.title}</h4><p class="text-gray-600">${e.date}</p>`;
+    calendarList.appendChild(div);
+  });
+}
+renderCalendar();
+</script>
 </body>
 </html>
