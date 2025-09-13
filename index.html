@@ -6,19 +6,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
   .hidden-section { display: none; }
   .active-link { font-weight: bold; text-decoration: underline; }
+  /* PAGE D'ACCUEIL */
   #home-bg {
     background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     height: 100vh;
+    width: 100vw;
     position: relative;
   }
-  #home-bg::before { content: ""; position: absolute; inset: 0; background-color: rgba(0,0,0,0.5); }
-  #home-content { position: relative; z-index: 10; }
-  main section { padding-left: 1rem; padding-right: 1rem; } 
+  #home-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0,0,0,0.5);
+  }
+  #home-content {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 0 1rem;
+  }
+  main section { padding-left: 1rem; padding-right: 1rem; margin-top: 2rem; } 
 </style>
 </head>
 <body class="bg-white text-black">
@@ -37,7 +60,6 @@
         <button onclick="showPage('pilotes', this)" class="nav-btn">Pilotes</button>
         <button onclick="showPage('calendrier', this)" class="nav-btn">Calendrier</button>
         <button onclick="showPage('reglements', this)" class="nav-btn">Règlements</button>
-        <button onclick="showPage('contact', this)" class="nav-btn">Contact</button>
       </div>
       <div class="md:hidden">
         <select onchange="showPage(this.value)" class="rounded-md px-2 py-1 text-black">
@@ -45,7 +67,6 @@
           <option value="pilotes">Pilotes</option>
           <option value="calendrier">Calendrier</option>
           <option value="reglements">Règlements</option>
-          <option value="contact">Contact</option>
         </select>
       </div>
     </div>
@@ -55,7 +76,7 @@
     <!-- HOME -->
     <section id="home">
       <div id="home-bg">
-        <div id="home-content" class="flex flex-col items-center justify-center h-screen text-center text-white px-4">
+        <div id="home-content">
           <h1 class="text-5xl font-extrabold">Bienvenue chez F1 DriveX</h1>
           <p class="mt-4 text-xl max-w-2xl">Plongez au cœur du championnat F1 DriveX, vivez chaque dépassement et chaque podium avec passion et adrénaline.</p>
           <button onclick="showPage('pilotes')" class="mt-8 px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200">Découvrir les pilotes</button>
@@ -64,7 +85,7 @@
     </section>
 
     <!-- PILOTES -->
-    <section id="pilotes" class="hidden-section mt-10">
+    <section id="pilotes" class="hidden-section">
       <h2 class="text-2xl font-bold mb-2">Nos Pilotes</h2>
       <p class="text-gray-600 text-sm mb-4">Recherchez un pilote par nom.</p>
       <input id="pilotSearch" type="text" placeholder="Rechercher..." class="px-3 py-2 border rounded-md w-full mb-4"/>
@@ -84,30 +105,6 @@
         <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement sportif</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
         <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement technique</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
       </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="hidden-section">
-      <h2 class="text-2xl font-bold mb-4">Contact</h2>
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="p-4 border rounded-lg">
-          <h4 class="font-semibold">Organisation</h4>
-          <p>Email: contact@drivex.example</p>
-        </div>
-        <div class="p-4 border rounded-lg">
-          <h4 class="font-semibold">Bureau sportif</h4>
-          <p>Email: sport@drivex.example</p>
-        </div>
-      </div>
-
-      <!-- FORMULAIRE FORMSSUBMIT -->
-      <form action="https://formsubmit.co/f1drivex@gmail.com" method="POST" class="mt-6 max-w-lg">
-        <input type="text" name="name" placeholder="Votre nom" class="w-full p-2 mb-3 border rounded" required/>
-        <input type="email" name="email" placeholder="Votre e-mail" class="w-full p-2 mb-3 border rounded" required/>
-        <input type="text" name="subject" placeholder="Sujet" class="w-full p-2 mb-3 border rounded" required/>
-        <textarea name="message" placeholder="Votre message" class="w-full p-2 mb-3 border rounded" rows="5" required></textarea>
-        <button type="submit" class="px-4 py-2 bg-black text-white rounded hover:bg-gray-800">Envoyer</button>
-      </form>
     </section>
   </main>
 
