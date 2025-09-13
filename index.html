@@ -6,10 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
+  /* RESET GLOBAL : supprime toute marge/padding par défaut */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
   html, body {
-    margin: -10;
-    padding: -10;
+    width: 100%;
     height: 100%;
+    overflow-x: hidden;
+    background: black; /* Sécurité si l'image ne charge pas */
   }
   body { display: flex; flex-direction: column; min-height: 100vh; }
   main { flex: 1; }
@@ -25,13 +32,12 @@
     height: 100vh;
     width: 100vw;
     position: relative;
-    margin:0;
   }
   #home-bg::before {
     content: "";
     position: absolute;
     inset: 0;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.5); /* assombrit l'image */
   }
   #home-content {
     position: relative;
@@ -43,8 +49,6 @@
     align-items: center;
     text-align: center;
     color: white;
-    padding: 0;
-    margin:0;
   }
 
   main section { padding-left: 1rem; padding-right: 1rem; margin-top: 2rem; }
@@ -97,7 +101,6 @@
     <!-- PILOTES -->
     <section id="pilotes" class="hidden-section">
       <h2 class="text-2xl font-bold mb-2">Nos Pilotes</h2>
-      <p class="text-gray-600 text-sm mb-4">Recherchez un pilote par nom.</p>
       <input id="pilotSearch" type="text" placeholder="Rechercher..." class="px-3 py-2 border rounded-md w-full mb-4"/>
       <div id="pilotList" class="grid md:grid-cols-4 gap-4"></div>
     </section>
