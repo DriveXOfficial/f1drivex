@@ -2,179 +2,271 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<title>F1 DriveX — Site officiel</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>F1 DriveX — Saison 2025</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #111; color: #fff; }
-  nav { background: #000; padding: 10px 20px; display: flex; justify-content: center; gap: 15px; }
-  nav button { background: transparent; border: none; color: #fff; font-weight: bold; cursor: pointer; }
-  nav button.active-link { text-decoration: underline; }
-  main { padding: 20px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-  .card { background: #222; padding: 10px; border-radius: 10px; cursor: pointer; text-align: center; }
-  .card img { width: 100%; border-radius: 10px; }
-  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 50; }
-  .modal-content { background: #111; padding: 20px; border-radius: 10px; max-width: 600px; width: 90%; position: relative; }
-  .close { position: absolute; top: 10px; right: 10px; cursor: pointer; font-size: 20px; font-weight: bold; }
-  h1,h2,h3 { margin: 10px 0; }
+  /* RESET GLOBAL */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow-x: hidden; background: black; }
+  body { display: flex; flex-direction: column; min-height: 100vh; }
+  main { flex: 1; }
+  .hidden-section { display: none; }
+  .active-link { font-weight: bold; text-decoration: underline; }
+  h1,h2,h3,h4,h5,h6 { margin-top:0;margin-bottom:0; }
+
+  /* PAGE D'ACCUEIL */
+  #home-bg {
+    background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg');
+    background-size: cover; background-position: center; background-repeat: no-repeat;
+    height: 100vh; width:100vw; position:relative;
+  }
+  #home-bg::before { content:""; position:absolute; inset:0; background-color:rgba(0,0,0,0.5); }
+  #home-content {
+    position:relative; z-index:10; height:100%;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    text-align:center; color:white;
+  }
+
+  main section { padding-left: 1rem; padding-right: 1rem; margin-top:2rem; }
 </style>
 </head>
-<body>
+<body class="bg-white text-black">
 
-<nav>
-  <button onclick="showPage('home', this)" class="active-link">Accueil</button>
-  <button onclick="showPage('pilotes', this)">Pilotes</button>
-  <button onclick="showPage('calendrier', this)">Calendrier</button>
+<!-- NAVBAR -->
+<nav class="w-full bg-black text-white shadow fixed z-20">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://i.postimg.cc/QdTyXmTH/4.png" alt="Logo F1 DriveX" class="h-10"/>
+      <div>
+        <div class="text-lg font-bold">F1 DriveX</div>
+        <div class="text-xs opacity-80">Un Championnat signé DriveX Official</div>
+      </div>
+    </div>
+    <div class="hidden md:flex gap-4">
+      <button onclick="showPage('home', this)" class="nav-btn">Accueil</button>
+      <button onclick="showPage('pilotes', this)" class="nav-btn">Pilotes</button>
+      <button onclick="showPage('calendrier', this)" class="nav-btn">Calendrier</button>
+      <button onclick="showPage('reglements', this)" class="nav-btn">Règlements</button>
+      <button onclick="showPage('contact', this)" class="nav-btn">Contact</button>
+    </div>
+    <div class="md:hidden">
+      <select onchange="showPage(this.value)" class="rounded-md px-2 py-1 text-black">
+        <option value="home">Accueil</option>
+        <option value="pilotes">Pilotes</option>
+        <option value="calendrier">Calendrier</option>
+        <option value="reglements">Règlements</option>
+        <option value="contact">Contact</option>
+      </select>
+    </div>
+  </div>
 </nav>
 
-<main>
-  <section id="home">
-    <h1 class="text-4xl text-center">Bienvenue sur F1 DriveX 2025</h1>
-    <p class="text-center mt-2">Découvrez tous les pilotes et le calendrier officiel de la saison 2025 de Formule 1.</p>
-  </section>
+<main class="pt-[70px]">
 
-  <section id="pilotes" class="hidden-section">
-    <h2 class="text-2xl mb-4">Pilotes F1 2025</h2>
-    <input id="searchPilot" placeholder="Rechercher un pilote..." class="w-full p-2 mb-4 rounded"/>
-    <div id="pilotList" class="grid"></div>
-  </section>
+<!-- HOME -->
+<section id="home">
+  <div id="home-bg">
+    <div id="home-content">
+      <h1 class="text-5xl font-extrabold mt-0">Bienvenue chez F1 DriveX</h1>
+      <p class="mt-4 text-xl max-w-2xl">Plongez au cœur du championnat F1 DriveX, vivez chaque dépassement et chaque podium avec passion et adrénaline.</p>
+      <button onclick="showPage('pilotes')" class="mt-8 px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200">Découvrir les pilotes</button>
+    </div>
+  </div>
+</section>
 
-  <section id="calendrier" class="hidden-section">
-    <h2 class="text-2xl mb-4">Calendrier F1 2025</h2>
-    <div id="gpList" class="grid"></div>
-  </section>
+<!-- PILOTES -->
+<section id="pilotes" class="hidden-section">
+  <h2 class="text-2xl font-bold mb-2">Nos Pilotes</h2>
+  <input id="pilotSearch" type="text" placeholder="Rechercher..." class="px-3 py-2 border rounded-md w-full mb-4"/>
+  <div id="pilotList" class="grid md:grid-cols-4 gap-4"></div>
+</section>
+
+<!-- CALENDRIER -->
+<section id="calendrier" class="hidden-section">
+  <h2 class="text-2xl font-bold">Calendrier</h2>
+  <div class="mt-4 grid md:grid-cols-2 gap-4" id="calendarList"></div>
+</section>
+
+<!-- REGLEMENTS -->
+<section id="reglements" class="hidden-section">
+  <h2 class="text-2xl font-bold">Règlements</h2>
+  <div class="mt-4 grid md:grid-cols-2 gap-4">
+    <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement sportif</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+    <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement technique</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="hidden-section">
+  <h2 class="text-2xl font-bold mb-4">Contact</h2>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="p-4 border rounded-lg">
+      <h4 class="font-semibold">Organisation</h4>
+      <p>Email: contact@drivex.example</p>
+    </div>
+    <div class="p-4 border rounded-lg">
+      <h4 class="font-semibold">Bureau sportif</h4>
+      <p>Email: sport@drivex.example</p>
+    </div>
+  </div>
+</section>
+
 </main>
 
-<!-- Modal Pilote -->
-<div id="pilotModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('pilotModal')">&times;</span>
-    <div id="pilotContent"></div>
+<!-- FOOTER -->
+<footer class="mt-auto py-6 bg-black text-white">
+  <div class="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm">
+    <div class="flex items-center gap-2">
+      <img src="https://i.postimg.cc/yxGLK36m/3.png" alt="Logo F1 DriveX blanc" class="h-6"/>
+      <span>© <span id="year"></span> F1 DriveX — Association DriveX</span>
+    </div>
+    <div class="flex gap-4">
+      <a href="#">Mentions légales</a>
+      <a href="#">Confidentialité</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL PILOTE -->
+<div id="pilotModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+  <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+    <button onclick="closeModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
+    <div id="modalContent"></div>
   </div>
 </div>
 
-<!-- Modal GP -->
-<div id="gpModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('gpModal')">&times;</span>
+<!-- MODAL GRAND PRIX -->
+<div id="gpModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+  <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+    <button onclick="closeGPModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
     <div id="gpContent"></div>
   </div>
 </div>
 
 <script>
-  // Navigation
-  function showPage(id, btn){
-    document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden-section'));
-    document.getElementById(id).classList.remove('hidden-section');
-    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active-link'));
-    if(btn) btn.classList.add('active-link');
-  }
+document.getElementById("year").textContent = new Date().getFullYear();
 
-  // Données pilotes F1 2025
-  const pilotes = [
-    {prenom:"Max", nom:"Verstappen", nationalite:"Pays-Bas", ecurie:"Red Bull Racing", numero:1, photo:"https://www.formula1.com/content/dam/fom-website/drivers/max-verstappen/max-verstappen.png", bio:"Champion du monde 2024, rapide et agressif."},
-    {prenom:"Sergio", nom:"Pérez", nationalite:"Mexique", ecurie:"Red Bull Racing", numero:11, photo:"https://www.formula1.com/content/dam/fom-website/drivers/sergio-perez/sergio-perez.png", bio:"Pilote expérimenté, fidèle à Red Bull Racing."},
-    {prenom:"Lewis", nom:"Hamilton", nationalite:"Royaume-Uni", ecurie:"Mercedes", numero:44, photo:"https://www.formula1.com/content/dam/fom-website/drivers/lewis-hamilton/lewis-hamilton.png", bio:"Multiple champion du monde, pilote légendaire."},
-    {prenom:"George", nom:"Russell", nationalite:"Royaume-Uni", ecurie:"Mercedes", numero:63, photo:"https://www.formula1.com/content/dam/fom-website/drivers/george-russell/george-russell.png", bio:"Jeune talent ambitieux de Mercedes."},
-    {prenom:"Charles", nom:"Leclerc", nationalite:"Monaco", ecurie:"Ferrari", numero:16, photo:"https://www.formula1.com/content/dam/fom-website/drivers/charles-leclerc/charles-leclerc.png", bio:"Leader de Ferrari, rapide et stratégique."},
-    {prenom:"Carlos", nom:"Sainz", nationalite:"Espagne", ecurie:"Ferrari", numero:55, photo:"https://www.formula1.com/content/dam/fom-website/drivers/carlos-sainz/carlos-sainz.png", bio:"Pilote espagnol, fiable et constant."},
-    {prenom:"Lando", nom:"Norris", nationalite:"Royaume-Uni", ecurie:"McLaren", numero:4, photo:"https://www.formula1.com/content/dam/fom-website/drivers/lando-norris/lando-norris.png", bio:"Jeune pilote talentueux et dynamique."},
-    {prenom:"Oscar", nom:"Piastri", nationalite:"Australie", ecurie:"McLaren", numero:81, photo:"https://www.formula1.com/content/dam/fom-website/drivers/oscar-piastri/oscar-piastri.png", bio:"Rookie australien prometteur."},
-    {prenom:"Fernando", nom:"Alonso", nationalite:"Espagne", ecurie:"Aston Martin", numero:14, photo:"https://www.formula1.com/content/dam/fom-website/drivers/fernando-alonso/fernando-alonso.png", bio:"Double champion du monde, expérimenté."},
-    {prenom:"Lance", nom:"Stroll", nationalite:"Canada", ecurie:"Aston Martin", numero:18, photo:"https://www.formula1.com/content/dam/fom-website/drivers/lance-stroll/lance-stroll.png", bio:"Pilote canadien fidèle à Aston Martin."},
-    {prenom:"Esteban", nom:"Ocon", nationalite:"France", ecurie:"Alpine", numero:31, photo:"https://www.formula1.com/content/dam/fom-website/drivers/esteban-ocon/esteban-ocon.png", bio:"Pilote français expérimenté."},
-    {prenom:"Pierre", nom:"Gasly", nationalite:"France", ecurie:"Alpine", numero:10, photo:"https://www.formula1.com/content/dam/fom-website/drivers/pierre-gasly/pierre-gasly.png", bio:"Pilote français solide et rapide."},
-    {prenom:"Valtteri", nom:"Bottas", nationalite:"Finlande", ecurie:"Alfa Romeo", numero:77, photo:"https://www.formula1.com/content/dam/fom-website/drivers/valtteri-bottas/valtteri-bottas.png", bio:"Pilote finlandais expérimenté."},
-    {prenom:"Zhou", nom:"Guanyu", nationalite:"Chine", ecurie:"Alfa Romeo", numero:24, photo:"https://www.formula1.com/content/dam/fom-website/drivers/zhou-guanyu/zhou-guanyu.png", bio:"Pilote chinois ambitieux."},
-    {prenom:"Kevin", nom:"Magnussen", nationalite:"Danemark", ecurie:"Haas", numero:20, photo:"https://www.formula1.com/content/dam/fom-website/drivers/kevin-magnussen/kevin-magnussen.png", bio:"Pilote danois solide et agressif."},
-    {prenom:"Nico", nom:"Hülkenberg", nationalite:"Allemagne", ecurie:"Haas", numero:27, photo:"https://www.formula1.com/content/dam/fom-website/drivers/nico-hulkenberg/nico-hulkenberg.png", bio:"Pilote allemand expérimenté."},
-    {prenom:"Alex", nom:"Albon", nationalite:"Thaïlande", ecurie:"Williams", numero:23, photo:"https://www.formula1.com/content/dam/fom-website/drivers/alex-albon/alex-albon.png", bio:"Pilote thaïlandais rapide et talentueux."},
-    {prenom:"Logan", nom:"Sargeant", nationalite:"USA", ecurie:"Williams", numero:2, photo:"https://www.formula1.com/content/dam/fom-website/drivers/logan-sargeant/logan-sargeant.png", bio:"Jeune rookie américain."},
-    {prenom:"Liam", nom:"Lawson", nationalite:"Nouvelle-Zélande", ecurie:"AlphaTauri", numero:4, photo:"https://www.formula1.com/content/dam/fom-website/drivers/liam-lawson/liam-lawson.png", bio:"Pilote néo-zélandais prometteur."},
-    {prenom:"Yuki", nom:"Tsunoda", nationalite:"Japon", ecurie:"AlphaTauri", numero:22, photo:"https://www.formula1.com/content/dam/fom-website/drivers/yuki-tsunoda/yuki-tsunoda.png", bio:"Pilote japonais rapide et agressif."}
-  ];
+// NAVIGATION
+function showPage(id, btn){
+  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden-section"));
+  document.getElementById(id).classList.remove("hidden-section");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active-link"));
+  if(btn) btn.classList.add("active-link");
+}
 
-  const pilotList = document.getElementById('pilotList');
-  const searchPilot = document.getElementById('searchPilot');
+// PILOTES 2025
+const pilots = [
+  {prenom:"Max", nom:"Verstappen", ecurie:"Red Bull Racing", numero:1, nationalite:"Pays-Bas", bio:"Champion du monde en titre.", photo:"https://pbs.twimg.com/profile_images/1308853454984043520/1ZBqY2n1_400x400.jpg"},
+  {prenom:"Lewis", nom:"Hamilton", ecurie:"Mercedes", numero:44, nationalite:"Royaume-Uni", bio:"7 fois champion du monde.", photo:"https://upload.wikimedia.org/wikipedia/commons/9/9f/Lewis_Hamilton_2016.jpg"},
+  {prenom:"Charles", nom:"Leclerc", ecurie:"Ferrari", numero:16, nationalite:"Monaco", bio:"Pilote talentueux de Ferrari.", photo:"https://upload.wikimedia.org/wikipedia/commons/4/40/Charles_Leclerc_2019.jpg"},
+  {prenom:"Carlos", nom:"Sainz", ecurie:"Ferrari", numero:55, nationalite:"Espagne", bio:"Double vainqueur de GP.", photo:"https://upload.wikimedia.org/wikipedia/commons/1/10/Carlos_Sainz_2022.jpg"},
+  {prenom:"George", nom:"Russell", ecurie:"Mercedes", numero:63, nationalite:"Royaume-Uni", bio:"Jeune pilote prometteur.", photo:"https://upload.wikimedia.org/wikipedia/commons/f/f7/George_Russell_2022.jpg"},
+  {prenom:"Sergio", nom:"Pérez", ecurie:"Red Bull Racing", numero:11, nationalite:"Mexique", bio:"Expérimenté et rapide.", photo:"https://upload.wikimedia.org/wikipedia/commons/4/4a/Sergio_Pérez_2022.jpg"},
+  {prenom:"Lando", nom:"Norris", ecurie:"McLaren", numero:4, nationalite:"Royaume-Uni", bio:"Jeune pilote talentueux.", photo:"https://upload.wikimedia.org/wikipedia/commons/3/3f/Lando_Norris_2022.jpg"},
+  {prenom:"Oscar", nom:"Piastri", ecurie:"McLaren", numero:81, nationalite:"Australie", bio:"Rookie impressionnant.", photo:"https://upload.wikimedia.org/wikipedia/commons/9/9c/Oscar_Piastri_2023.jpg"},
+  {prenom:"Fernando", nom:"Alonso", ecurie:"Aston Martin", numero:14, nationalite:"Espagne", bio:"Double champion du monde.", photo:"https://upload.wikimedia.org/wikipedia/commons/2/2b/Fernando_Alonso_2022.jpg"},
+  {prenom:"Lance", nom:"Stroll", ecurie:"Aston Martin", numero:18, nationalite:"Canada", bio:"Pilote expérimenté.", photo:"https://upload.wikimedia.org/wikipedia/commons/e/e8/Lance_Stroll_2022.jpg"},
+  {prenom:"Pierre", nom:"Gasly", ecurie:"Alpine", numero:10, nationalite:"France", bio:"Vainqueur de GP.", photo:"https://upload.wikimedia.org/wikipedia/commons/4/4c/Pierre_Gasly_2022.jpg"},
+  {prenom:"Esteban", nom:"Ocon", ecurie:"Alpine", numero:31, nationalite:"France", bio:"Solide et rapide.", photo:"https://upload.wikimedia.org/wikipedia/commons/6/68/Esteban_Ocon_2022.jpg"},
+  {prenom:"Valtteri", nom:"Bottas", ecurie:"Alfa Romeo", numero:77, nationalite:"Finlande", bio:"Ancien pilote Mercedes.", photo:"https://upload.wikimedia.org/wikipedia/commons/8/8d/Valtteri_Bottas_2022.jpg"},
+  {prenom:"Zhou", nom:"Guanyu", ecurie:"Alfa Romeo", numero:24, nationalite:"Chine", bio:"Pilote chinois talentueux.", photo:"https://upload.wikimedia.org/wikipedia/commons/6/6e/Zhou_Guanyu_2022.jpg"},
+  {prenom:"Kevin", nom:"Magnussen", ecurie:"Haas", numero:20, nationalite:"Danemark", bio:"Pilote rapide et expérimenté.", photo:"https://upload.wikimedia.org/wikipedia/commons/1/11/Kevin_Magnussen_2022.jpg"},
+  {prenom:"Nico", nom:"Hülkenberg", ecurie:"Haas", numero:27, nationalite:"Allemagne", bio:"Ancien pilote de F1.", photo:"https://upload.wikimedia.org/wikipedia/commons/d/d5/Nico_H%C3%BClkenberg_2022.jpg"},
+  {prenom:"Alexander", nom:"Albon", ecurie:"Williams", numero:23, nationalite:"Thaïlande", bio:"Pilote talentueux.", photo:"https://upload.wikimedia.org/wikipedia/commons/4/49/Alexander_Albon_2022.jpg"},
+  {prenom:"Logan", nom:"Sargeant", ecurie:"Williams", numero:2, nationalite:"USA", bio:"Rookie américain.", photo:"https://upload.wikimedia.org/wikipedia/commons/3/3a/Logan_Sargeant_2022.jpg"},
+  {prenom:"Yuki", nom:"Tsunoda", ecurie:"AlphaTauri", numero:22, nationalite:"Japon", bio:"Pilote rapide et agressif.", photo:"https://upload.wikimedia.org/wikipedia/commons/0/0f/Yuki_Tsunoda_2022.jpg"},
+  {prenom:"Nyck", nom:"De Vries", ecurie:"AlphaTauri", numero:21, nationalite:"Pays-Bas", bio:"Champion Formule E.", photo:"https://upload.wikimedia.org/wikipedia/commons/e/e3/Nyck_de_Vries_2022.jpg"}
+];
 
-  function renderPilots() {
-    const query = searchPilot.value.toLowerCase();
-    pilotList.innerHTML = '';
-    pilotes.filter(p => (p.prenom + ' ' + p.nom).toLowerCase().includes(query)).forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = `<img src="${p.photo}" alt="${p.prenom} ${p.nom}"><h3>${p.prenom} ${p.nom}</h3><p>${p.ecurie}</p>`;
-      div.onclick = () => openPilotModal(p);
-      pilotList.appendChild(div);
-    });
-  }
+const pilotList=document.getElementById("pilotList");
 
-  searchPilot.addEventListener('input', renderPilots);
-  renderPilots();
-
-  function openPilotModal(p) {
-    document.getElementById('pilotContent').innerHTML = `
-      <h2>${p.prenom} ${p.nom}</h2>
-      <p><strong>Écurie:</strong> ${p.ecurie}</p>
-      <p><strong>Numéro:</strong> ${p.numero}</p>
-      <p><strong>Nationalité:</strong> ${p.nationalite}</p>
-      <p>${p.bio}</p>
-      <img src="${p.photo}" style="width:100%; margin-top:10px;">
-    `;
-    document.getElementById('pilotModal').style.display = 'flex';
-  }
-
-  function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-  // Données calendrier F1 2025
-  const gp2025 = [
-    {date:"2025-03-02", title:"GP Australie", pays:"Australie", img:"https://upload.wikimedia.org/wikipedia/commons/6/6a/Circuit_Melbourne.png"},
-    {date:"2025-03-16", title:"GP Bahreïn", pays:"Bahreïn", img:"https://upload.wikimedia.org/wikipedia/commons/f/f6/Bahrain_International_Circuit_track_map.png"},
-    {date:"2025-03-30", title:"GP Arabie Saoudite", pays:"Arabie Saoudite", img:"https://upload.wikimedia.org/wikipedia/commons/5/51/Jeddah_Circuit_track_map.png"},
-    {date:"2025-04-06", title:"GP Émilie-Romagne", pays:"Italie", img:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Imola_2019.svg"},
-    {date:"2025-04-20", title:"GP Miami", pays:"USA", img:"https://upload.wikimedia.org/wikipedia/commons/f/fc/Miami_GP_Track.png"},
-    {date:"2025-05-04", title:"GP Espagne", pays:"Espagne", img:"https://upload.wikimedia.org/wikipedia/commons/0/01/Circuit_Catalunya.png"},
-    {date:"2025-05-11", title:"GP Monaco", pays:"Monaco", img:"https://upload.wikimedia.org/wikipedia/commons/e/e0/Monaco_2022.svg"},
-    {date:"2025-05-25", title:"GP Azerbaïdjan", pays:"Azerbaïdjan", img:"https://upload.wikimedia.org/wikipedia/commons/8/8e/Baku_City_Circuit_track_map.png"},
-    {date:"2025-06-01", title:"GP Canada", pays:"Canada", img:"https://upload.wikimedia.org/wikipedia/commons/c/cf/Circuit_Gilles_Villeneuve_track_map.png"},
-    {date:"2025-06-15", title:"GP Autriche", pays:"Autriche", img:"https://upload.wikimedia.org/wikipedia/commons/1/1a/Red_Bull_Ring_track_map.png"},
-    {date:"2025-06-29", title:"GP Grande-Bretagne", pays:"Royaume-Uni", img:"https://upload.wikimedia.org/wikipedia/commons/5/53/Silverstone_Circuit_map.svg"},
-    {date:"2025-07-06", title:"GP Hongrie", pays:"Hongrie", img:"https://upload.wikimedia.org/wikipedia/commons/6/69/Hungaroring_track_map.svg"},
-    {date:"2025-07-20", title:"GP Belgique", pays:"Belgique", img:"https://upload.wikimedia.org/wikipedia/commons/0/07/Circuit_de_Spa-Francorchamps_track_map.svg"},
-    {date:"2025-08-31", title:"GP Pays-Bas", pays:"Pays-Bas", img:"https://upload.wikimedia.org/wikipedia/commons/f/fd/Zandvoort_2020_track_map.svg"},
-    {date:"2025-09-07", title:"GP Italie", pays:"Italie", img:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Imola_2019.svg"},
-    {date:"2025-09-21", title:"GP Singapour", pays:"Singapour", img:"https://upload.wikimedia.org/wikipedia/commons/f/fb/Singapore_GP_2012_track_map.png"},
-    {date:"2025-09-28", title:"GP Japon", pays:"Japon", img:"https://upload.wikimedia.org/wikipedia/commons/7/7f/Suzuka_Circuit_map.svg"},
-    {date:"2025-10-05", title:"GP Qatar", pays:"Qatar", img:"https://upload.wikimedia.org/wikipedia/commons/5/53/Losail_International_Circuit_track_map.svg"},
-    {date:"2025-10-19", title:"GP États-Unis", pays:"USA", img:"https://upload.wikimedia.org/wikipedia/commons/f/fc/Circuit_of_the_Americas_track_map.svg"},
-    {date:"2025-10-26", title:"GP Mexique", pays:"Mexique", img:"https://upload.wikimedia.org/wikipedia/commons/1/19/Autodromo_Hermanos_Rodriguez_track_map.svg"},
-    {date:"2025-11-02", title:"GP Brésil", pays:"Brésil", img:"https://upload.wikimedia.org/wikipedia/commons/4/49/Interlagos_track_map.svg"},
-    {date:"2025-11-16", title:"GP Abu Dhabi", pays:"Émirats arabes unis", img:"https://upload.wikimedia.org/wikipedia/commons/8/85/Yas_Marina_Circuit_track_map.svg"}
-  ];
-
-  const gpList = document.getElementById('gpList');
-  gp2025.forEach(gp=>{
-    const div = document.createElement('div');
-    div.className='card';
-    div.innerHTML = `<h3>${gp.title}</h3><p>${gp.pays}</p>`;
-    div.onclick = () => openGPModal(gp);
-    gpList.appendChild(div);
+function renderPilots(){
+  const query=document.getElementById("pilotSearch").value.toLowerCase();
+  pilotList.innerHTML="";
+  pilots.filter(p=>p.prenom.toLowerCase().includes(query)||p.nom.toLowerCase().includes(query)).forEach(p=>{
+    let div=document.createElement("div");
+    div.className="p-4 border rounded-lg bg-white shadow hover:bg-gray-50 cursor-pointer text-center font-semibold";
+    div.innerHTML=`<img src="${p.photo}" class="w-full h-32 object-cover rounded mb-2"/>
+                     <div>${p.prenom} ${p.nom}</div>
+                     <div class="text-sm text-gray-500">${p.ecurie}</div>`;
+    div.onclick=()=>openModal(p);
+    pilotList.appendChild(div);
   });
+}
+document.getElementById("pilotSearch").oninput=renderPilots;
+renderPilots();
 
-  function openGPModal(gp) {
-    document.getElementById('gpContent').innerHTML = `
-      <h2>${gp.title}</h2>
-      <p><strong>Pays:</strong> ${gp.pays}</p>
-      <p><strong>Date:</strong> ${new Date(gp.date).toLocaleDateString()}</p>
-      <img src="${gp.img}" style="width:100%; margin-top:10px;">
-    `;
-    document.getElementById('gpModal').style.display='flex';
-  }
+function openModal(p){
+  const content=document.getElementById("modalContent");
+  content.innerHTML=`
+    <div class="flex gap-4">
+      <img src="${p.photo}" class="w-24 h-24 rounded-full object-cover"/>
+      <div>
+        <h3 class="text-xl font-bold">${p.prenom} ${p.nom}</h3>
+        <p class="text-gray-600">Écurie : ${p.ecurie}</p>
+        <p class="text-gray-600">Numéro : ${p.numero}</p>
+        <p class="text-gray-600">Nationalité : ${p.nationalite}</p>
+      </div>
+    </div>
+    <p class="mt-4 text-sm">${p.bio}</p>
+  `;
+  document.getElementById("pilotModal").classList.remove("hidden");
+  document.getElementById("pilotModal").classList.add("flex");
+}
+function closeModal(){document.getElementById("pilotModal").classList.add("hidden");}
 
-  // Page d'accueil
-  showPage('home');
+// CALENDRIER F1 2025
+const events = [
+  {date:"2025-03-16", title:"Grand Prix d'Australie", country:"AU", circuit:"Melbourne Grand Prix Circuit", location:"Melbourne", distance:"5.303 km", tours:"58", img:"https://upload.wikimedia.org/wikipedia/commons/0/0f/Melbourne_Grand_Prix_Circuit.png"},
+  {date:"2025-03-30", title:"Grand Prix de Bahreïn", country:"BH", circuit:"Bahrain International Circuit", location:"Sakhir", distance:"5.412 km", tours:"57", img:"https://upload.wikimedia.org/wikipedia/commons/2/2c/Bahrain_International_Circuit.png"},
+  {date:"2025-04-13", title:"Grand Prix d'Arabie Saoudite", country:"SA", circuit:"Jeddah Street Circuit", location:"Jeddah", distance:"6.174 km", tours:"50", img:"https://upload.wikimedia.org/wikipedia/commons/f/f5/Jeddah_Circuit.png"},
+  {date:"2025-04-27", title:"Grand Prix d'Émilie-Romagne", country:"IT", circuit:"Imola", location:"Imola", distance:"4.909 km", tours:"63", img:"https://upload.wikimedia.org/wikipedia/commons/3/3f/Imola_Circuit.png"},
+  {date:"2025-05-11", title:"Grand Prix de Miami", country:"US", circuit:"Miami International Autodrome", location:"Miami", distance:"5.412 km", tours:"57", img:"https://upload.wikimedia.org/wikipedia/commons/5/57/Miami_Circuit.png"},
+  {date:"2025-05-25", title:"Grand Prix d'Espagne", country:"ES", circuit:"Circuit de Barcelona-Catalunya", location:"Barcelone", distance:"4.675 km", tours:"66", img:"https://upload.wikimedia.org/wikipedia/commons/0/01/Circuit_Catalunya.png"},
+  {date:"2025-06-08", title:"Grand Prix de Monaco", country:"MC", circuit:"Circuit de Monaco", location:"Monaco", distance:"3.337 km", tours:"78", img:"https://upload.wikimedia.org/wikipedia/commons/6/6f/Circuit_Monaco.png"},
+  {date:"2025-06-22", title:"Grand Prix d'Azerbaïdjan", country:"AZ", circuit:"Baku City Circuit", location:"Bakou", distance:"6.003 km", tours:"51", img:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Baku_City_Circuit.png"},
+  {date:"2025-07-06", title:"Grand Prix du Canada", country:"CA", circuit:"Circuit Gilles Villeneuve", location:"Montréal", distance:"4.361 km", tours:"70", img:"https://upload.wikimedia.org/wikipedia/commons/3/30/Circuit_Gilles_Villeneuve.png"},
+  {date:"2025-07-20", title:"Grand Prix de France", country:"FR", circuit:"Circuit Paul Ricard", location:"Le Castellet", distance:"5.842 km", tours:"53", img:"https://upload.wikimedia.org/wikipedia/commons/3/37/Circuit_Paul_Ricard.png"},
+  {date:"2025-08-03", title:"Grand Prix d'Autriche", country:"AT", circuit:"Red Bull Ring", location:"Spielberg", distance:"4.318 km", tours:"71", img:"https://upload.wikimedia.org/wikipedia/commons/0/0e/Red_Bull_Ring.png"},
+  {date:"2025-08-31", title:"Grand Prix de Belgique", country:"BE", circuit:"Circuit de Spa-Francorchamps", location:"Spa", distance:"7.004 km", tours:"44", img:"https://upload.wikimedia.org/wikipedia/commons/5/5e/Spa-Francorchamps.png"},
+  {date:"2025-09-14", title:"Grand Prix des Pays-Bas", country:"NL", circuit:"Circuit Zandvoort", location:"Zandvoort", distance:"4.259 km", tours:"72", img:"https://upload.wikimedia.org/wikipedia/commons/d/d6/Zandvoort_Circuit.png"},
+  {date:"2025-09-28", title:"Grand Prix d'Italie", country:"IT", circuit:"Monza", location:"Monza", distance:"5.793 km", tours:"53", img:"https://upload.wikimedia.org/wikipedia/commons/1/1a/Monza_Circuit.png"},
+  {date:"2025-10-05", title:"Grand Prix de Singapour", country:"SG", circuit:"Marina Bay Street Circuit", location:"Singapour", distance:"5.063 km", tours:"61", img:"https://upload.wikimedia.org/wikipedia/commons/6/6e/Singapore_Circuit.png"},
+  {date:"2025-10-19", title:"Grand Prix du Japon", country:"JP", circuit:"Suzuka Circuit", location:"Suzuka", distance:"5.807 km", tours:"53", img:"https://upload.wikimedia.org/wikipedia/commons/9/98/Suzuka_Circuit.png"},
+  {date:"2025-11-02", title:"Grand Prix des États-Unis", country:"US", circuit:"Circuit of the Americas", location:"Austin", distance:"5.513 km", tours:"56", img:"https://upload.wikimedia.org/wikipedia/commons/5/5b/COTA_Circuit.png"},
+  {date:"2025-11-16", title:"Grand Prix du Mexique", country:"MX", circuit:"Autodromo Hermanos Rodriguez", location:"Mexico", distance:"4.304 km", tours:"71", img:"https://upload.wikimedia.org/wikipedia/commons/4/4d/Autodromo_Hermanos_Rodriguez.png"},
+  {date:"2025-11-30", title:"Grand Prix du Brésil", country:"BR", circuit:"Interlagos", location:"São Paulo", distance:"4.309 km", tours:"71", img:"https://upload.wikimedia.org/wikipedia/commons/3/37/Interlagos.png"},
+  {date:"2025-12-07", title:"Grand Prix d'Abou Dhabi", country:"AE", circuit:"Yas Marina Circuit", location:"Abou Dhabi", distance:"5.554 km", tours:"55", img:"https://upload.wikimedia.org/wikipedia/commons/5/5a/Yas_Marina_Circuit.png"}
+];
+
+const cal=document.getElementById("calendarList");
+events.forEach(e=>{
+  let div=document.createElement("div");
+  div.className="p-4 border rounded-lg cursor-pointer hover:bg-gray-50 flex items-center gap-2";
+  div.textContent=`${e.title} - ${new Date(e.date).toLocaleDateString("fr-FR")}`;
+  div.onclick=()=>openGPModal(e);
+  cal.appendChild(div);
+});
+
+function openGPModal(e){
+  const content=document.getElementById("gpContent");
+  const flags={AU:'🇦🇺',BH:'🇧🇭',SA:'🇸🇦',IT:'🇮🇹',US:'🇺🇸',ES:'🇪🇸',MC:'🇲🇨',AZ:'🇦🇿',CA:'🇨🇦',FR:'🇫🇷',AT:'🇦🇹',BE:'🇧🇪',NL:'🇳🇱',SG:'🇸🇬',JP:'🇯🇵',MX:'🇲🇽',BR:'🇧🇷',AE:'🇦🇪'};
+  content.innerHTML=`
+    <h3 class="text-xl font-bold mb-2">${e.title} ${flags[e.country]||''}</h3>
+    <p class="text-gray-600 mb-1"><strong>Date :</strong> ${new Date(e.date).toLocaleDateString("fr-FR")}</p>
+    <p class="text-gray-600 mb-1"><strong>Lieu :</strong> ${e.location}</p>
+    <p class="text-gray-600 mb-1"><strong>Circuit :</strong> ${e.circuit}</p>
+    <p class="text-gray-600 mb-1"><strong>Distance :</strong> ${e.distance}</p>
+    <p class="text-gray-600 mb-2"><strong>Tours :</strong> ${e.tours}</p>
+    <img src="${e.img}" class="w-full h-40 object-cover rounded mb-2"/>
+  `;
+  document.getElementById("gpModal").classList.remove("hidden");
+  document.getElementById("gpModal").classList.add("flex");
+}
+function closeGPModal(){document.getElementById("gpModal").classList.add("hidden");}
+
+showPage("home", document.querySelector(".nav-btn"));
 </script>
-
 </body>
 </html>
