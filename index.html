@@ -6,28 +6,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html, body { width:100%; height:100%; overflow-x:hidden; background:black; }
-  body { display:flex; flex-direction:column; min-height:100vh; }
-  main { flex:1; }
-  .hidden-section { display:none; }
-  .active-link { font-weight:bold; text-decoration:underline; }
-  h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:0;}
-
-  #home-bg { background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg'); background-size:cover; background-position:center; height:100vh; width:100vw; position:relative; }
-  #home-bg::before { content:""; position:absolute; inset:0; background-color: rgba(0,0,0,0.5); }
-  #home-content { position:relative; z-index:10; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; color:white; }
-
-  main section { padding-left:1rem; padding-right:1rem; margin-top:2rem; }
-
-  .driver { border:1px solid #ddd; border-radius:8px; padding:6px; text-align:center; cursor:pointer; background:white; }
-
-  /* Calendrier */
-  .race { position:relative; width:100%; aspect-ratio:753/494; border-radius:8px; overflow:hidden; cursor:pointer; background-size:cover; background-position:center; transition: filter 0.3s; }
-  .race-overlay { position:absolute; inset:0; background-color:rgba(0,0,0,0.4); display:flex; flex-direction:column; justify-content:flex-end; padding:10px; color:white; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
-  .race:hover .race-overlay { background-color:rgba(0,0,0,0.0); }
-  .race-title { font-weight:bold; font-size:1.1rem; }
-  .race-date { font-size:0.9rem; margin-top:2px; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow-x:hidden; background:black; }
+body { display:flex; flex-direction:column; min-height:100vh; }
+main { flex:1; }
+.hidden-section { display:none; }
+.active-link { font-weight:bold; text-decoration:underline; }
+h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:0;}
+#home-bg { background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg'); background-size:cover; background-position:center; height:100vh; width:100vw; position:relative; }
+#home-bg::before { content:""; position:absolute; inset:0; background-color: rgba(0,0,0,0.5); }
+#home-content { position:relative; z-index:10; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; color:white; }
+main section { padding-left:1rem; padding-right:1rem; margin-top:2rem; }
+.driver { border:1px solid #ddd; border-radius:8px; padding:6px; text-align:center; cursor:pointer; background:white; }
+.race { border-radius:8px; padding:6px; text-align:center; cursor:pointer; position:relative; background-size:cover; background-position:center; overflow:hidden; }
+.race-info { background:rgba(0,0,0,0.5); color:white; padding:4px; text-align:center; position:absolute; bottom:0; width:100%; }
+.race-info h4, .race-info p { text-shadow: 1px 1px 2px black; }
+.live-badge { position:absolute; top:4px; left:4px; background:red; color:white; padding:2px 6px; font-weight:bold; border-radius:50%; font-size:0.8rem; z-index:20; }
 </style>
 </head>
 <body class="bg-white text-black">
@@ -83,7 +77,6 @@
 <h2 class="text-2xl font-bold">Calendrier 2025</h2>
 <div class="mt-4 grid md:grid-cols-3 gap-4" id="calendarList"></div>
 </section>
-
 <!-- REGLEMENTS -->
 <section id="reglements" class="hidden-section">
 <h2 class="text-2xl font-bold">Règlements</h2>
@@ -146,9 +139,11 @@ function showPage(id, btn){
 
 // PILOTES
 const pilots=[
-  {prenom:"Max",nom:"Verstappen",ecurie:"Red Bull Racing",numero:1,nationalite:"Néerlandaise",bio:"Champion du monde 2024, pilote dominant."},
-  {prenom:"Sergio",nom:"Pérez",ecurie:"Red Bull Racing",numero:11,nationalite:"Mexicaine",bio:"Pilote expérimenté et fiable en course."}
-  // ... ajouter les autres pilotes
+  {prenom:"Max",nom:"Verstappen",ecurie:"Red Bull Racing",numero:1,nationalite:"Néerlandaise",bio:"Champion du monde 2024, pilote dominant.",photo:"https://www.formula1.com/content/dam/fom-website/teams/2025/redbull/redbull-max-verstappen.png"},
+  {prenom:"Sergio",nom:"Pérez",ecurie:"Red Bull Racing",numero:11,nationalite:"Mexicaine",bio:"Pilote expérimenté et fiable en course.",photo:"https://www.formula1.com/content/dam/fom-website/teams/2025/redbull/redbull-sergio-perez.png"},
+  {prenom:"Lewis",nom:"Hamilton",ecurie:"Mercedes",numero:44,nationalite:"Britannique",bio:"Septuple champion du monde.",photo:"https://www.formula1.com/content/dam/fom-website/teams/2025/mercedes/mercedes-lewis-hamilton.png"},
+  {prenom:"George",nom:"Russell",ecurie:"Mercedes",numero:63,nationalite:"Britannique",bio:"Jeune pilote talentueux.",photo:"https://www.formula1.com/content/dam/fom-website/teams/2025/mercedes/mercedes-george-russell.png"}
+  // ... ajouter les autres pilotes 2025
 ];
 const pilotList=document.getElementById("pilotList");
 function renderPilots(){
@@ -157,7 +152,7 @@ function renderPilots(){
   pilots.filter(p=>p.prenom.toLowerCase().includes(query)||p.nom.toLowerCase().includes(query)).forEach(p=>{
     let div=document.createElement("div");
     div.className="driver";
-    div.innerHTML=`<p class='font-semibold'>${p.prenom} ${p.nom}</p><p>${p.ecurie}</p>`;
+    div.innerHTML=`<img src="${p.photo}" class="w-full h-32 object-contain mb-2"/><p class='font-semibold'>${p.prenom} ${p.nom}</p><p>${p.ecurie}</p>`;
     div.onclick=()=>openModal(p);
     pilotList.appendChild(div);
   });
@@ -167,32 +162,39 @@ renderPilots();
 
 function openModal(p){
   const content=document.getElementById("modalContent");
-  content.innerHTML=`<div class='flex gap-4'><div><h3 class='text-xl font-bold'>${p.prenom} ${p.nom}</h3><p>Écurie : ${p.ecurie}</p><p>Numéro : ${p.numero}</p><p>Nationalité : ${p.nationalite}</p></div></div><p class='mt-4 text-sm'>${p.bio}</p>`;
+  content.innerHTML=`<div class='flex gap-4'><img src="${p.photo}" class="w-24 h-24 object-cover rounded-full"/><div><h3 class='text-xl font-bold'>${p.prenom} ${p.nom}</h3><p>Écurie : ${p.ecurie}</p><p>Numéro : ${p.numero}</p><p>Nationalité : ${p.nationalite}</p></div></div><p class='mt-4 text-sm'>${p.bio}</p>`;
   document.getElementById("pilotModal").classList.remove("hidden");
   document.getElementById("pilotModal").classList.add("flex");
 }
 function closeModal(){document.getElementById("pilotModal").classList.add("hidden");}
 
-// GP
+// GP CALENDRIER
 const races=[
-  {date:"2025-03-09",title:"Grand Prix de Bahreïn",country:"Bahreïn",heure:"18:00",desc:"Circuit international de Bahreïn",img:"https://www.autohebdo.fr/app/uploads/2024/02/DPPI_00124001_1408-753x494.jpg"},
-  {date:"2025-03-23",title:"Grand Prix d'Arabie Saoudite",country:"Arabie Saoudite",heure:"19:00",desc:"Circuit de Djeddah",img:"https://static.wui.fr/28/2023/02/photo_article/1947/1038/800-L-grand-prix-darabie-saoudite-2023.jpg"},
-  {date:"2025-04-06",title:"Grand Prix d'Australie",country:"Australie",heure:"06:00",desc:"Circuit d'Albert Park",img:"https://www.autohebdo.fr/app/uploads/2025/03/DPPI_00124004_986-1-753x494.jpg"},
-  {date:"2025-04-20",title:"Grand Prix d'Azerbaïdjan",country:"Azerbaïdjan",heure:"14:00",desc:"Circuit urbain de Bakou",img:"https://upload.wikimedia.org/wikipedia/commons/d/d6/Baku_City_Circuit.png"},
-  {date:"2025-05-04",title:"Grand Prix de Miami",country:"USA",heure:"20:30",desc:"Circuit urbain de Miami",img:"https://upload.wikimedia.org/wikipedia/commons/c/c2/Miami_GP_Circuit.png"},
-  {date:"2025-05-18",title:"Grand Prix d'Espagne",country:"Espagne",heure:"15:00",desc:"Circuit de Barcelone",img:"https://upload.wikimedia.org/wikipedia/commons/0/01/Circuit_Catalunya.png"},
-  {date:"2025-06-01",title:"Grand Prix de Monaco",country:"Monaco",heure:"15:00",desc:"Circuit urbain de Monaco",img:"https://upload.wikimedia.org/wikipedia/commons/5/5e/Monte_Carlo_circuit_map.png"},
-  {date:"2025-06-15",title:"Grand Prix du Canada",country:"Canada",heure:"20:00",desc:"Circuit Gilles-Villeneuve",img:"https://upload.wikimedia.org/wikipedia/commons/f/f1/Circuit_Gilles-Villeneuve.png"}
+  {date:"2025-03-09",title:"Grand Prix de Bahreïn",img:"https://upload.wikimedia.org/wikipedia/commons/6/6a/Bahrain_International_Circuit_layout.png",heure:"18:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Circuit international de Bahreïn."},
+  {date:"2025-03-16",title:"Grand Prix d'Arabie Saoudite",img:"https://upload.wikimedia.org/wikipedia/commons/1/1f/Jeddah_Circuit_layout.png",heure:"18:30",twitch:"https://www.twitch.tv/drivex_off",desc:"Circuit de Jeddah."},
+  {date:"2025-03-30",title:"Grand Prix d'Australie",img:"https://upload.wikimedia.org/wikipedia/commons/e/e1/Melbourne_Grand_Prix_Circuit.png",heure:"07:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Circuit de Melbourne."},
+  {date:"2025-04-06",title:"Grand Prix d'Italie",img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Monza_Circuit_Layout.png",heure:"15:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Circuit de Monza."},
+  {date:"2025-04-20",title:"Grand Prix de France",img:"https://upload.wikimedia.org/wikipedia/commons/3/37/Circuit_de_Paris.png",heure:"14:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Circuit de Paul Ricard."},
+  {date:"2025-05-04",title:"Grand Prix d'Espagne",img:"https://upload.wikimedia.org/wikipedia/commons/0/0e/Circuit_Catalunya.png",heure:"15:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Circuit de Barcelone."},
+  {date:"2025-05-18",title:"Grand Prix de Monaco",img:"https://upload.wikimedia.org/wikipedia/commons/7/7f/Circuit_Monte_Carlo.png",heure:"15:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Circuit de Monaco."},
+  {date:"2025-06-01",title:"Grand Prix du Canada",img:"https://upload.wikimedia.org/wikipedia/commons/9/9b/Circuit_Gilles_Villeneuve.png",heure:"20:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Circuit de Montréal."}
 ];
-
 const cal=document.getElementById("calendarList");
 function renderRaces(){
   cal.innerHTML="";
+  const now=new Date();
   races.forEach(r=>{
+    let raceDate=new Date(r.date+"T"+r.heure+":00");
+    let isLive=now>=raceDate && now<=new Date(raceDate.getTime()+2*60*60*1000); // 2h de durée
     let div=document.createElement("div");
-    div.className="race";
+    div.className="race relative";
+    if(isLive) div.style.border="3px solid red";
     div.style.backgroundImage=`url('${r.img}')`;
-    div.innerHTML=`<div class='race-overlay'><span class='race-title'>${r.title}</span><span class='race-date'>${new Date(r.date).toLocaleDateString('fr-FR')}</span></div>`;
+    div.innerHTML=`${isLive?'<div class="live-badge">LIVE</div>':''}<div class="race-info"><h4>${r.title}</h4><p>${new Date(r.date).toLocaleDateString("fr-FR")} ${r.heure}</p><p><a href="${r.twitch}" target="_blank" class="text-blue-400 underline">Voir sur Twitch</a></p></div>`;
+    div.style.aspectRatio="753/494";
+    div.style.backgroundSize="cover";
+    div.style.backgroundPosition="center";
+    div.style.borderRadius="8px";
     div.onclick=()=>openGPModal(r);
     cal.appendChild(div);
   });
@@ -201,7 +203,7 @@ renderRaces();
 
 function openGPModal(r){
   const content=document.getElementById("gpContent");
-  content.innerHTML=`<h3 class='text-xl font-bold mb-2'>${r.title}</h3><p>Date : ${new Date(r.date).toLocaleDateString('fr-FR')}</p><p>Heure : ${r.heure}</p><p>${r.desc}</p>`;
+  content.innerHTML=`<h3 class='text-xl font-bold mb-2'>${r.title}</h3><p>Date : ${new Date(r.date).toLocaleDateString("fr-FR")} ${r.heure}</p><p>${r.desc}</p><p><a href="${r.twitch}" target="_blank" class="text-blue-600 font-semibold">🔥 Suivez la course sur Twitch !</a></p>`;
   document.getElementById("gpModal").classList.remove("hidden");
   document.getElementById("gpModal").classList.add("flex");
 }
