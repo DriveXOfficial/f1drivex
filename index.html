@@ -15,31 +15,37 @@
   h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:0;}
 
   /* PAGE D'ACCUEIL */
-  #home-bg {
-    background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg');
-    background-size:cover;
-    background-position:center;
-    height:100vh;
-    width:100vw;
-    position:relative;
-  }
-  #home-bg::before {
-    content:"";
-    position:absolute;
-    inset:0;
-    background-color: rgba(0,0,0,0.5);
-  }
-  #home-content {
-    position:relative;
-    z-index:10;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    color:white;
-  }
+#home-bg {
+  background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg');
+  background-size:cover;
+  background-position:center;
+  width:100vw;
+  height:100vh;
+  position:relative;
+}
+#home-bg::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background-color: rgba(0,0,0,0.5);
+}
+#home-content {
+  position:relative;
+  z-index:10;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  color:white;
+  padding:0 1rem; /* pour mobile */
+}
+#home h1 { font-size:4rem; font-weight:800; line-height:1.2; }
+#home p { margin-top:1rem; font-size:1.25rem; max-width:700px; }
+#home button { margin-top:2rem; padding:0.75rem 2rem; font-weight:bold; border-radius:0.5rem; cursor:pointer; transition:0.3s; background:white; color:black; }
+#home button:hover { background:rgba(255,255,255,0.8); }
+
   main section { padding-left:1rem; padding-right:1rem; margin-top:2rem; }
 
   /* PILOTES */
