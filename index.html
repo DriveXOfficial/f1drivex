@@ -8,179 +8,131 @@
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { width:100%; height:100%; overflow-x:hidden; background:black; }
-  body { display:flex; flex-direction:column; min-height:100vh; }
-  main { flex:1; }
-  .hidden-section { display:none; }
-  .active-link { font-weight:bold; text-decoration:underline; }
-  h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:0;}
+  body { display:flex; flex-direction:column; min-height:100vh; font-family:sans-serif; }
 
-  /* PAGE D'ACCUEIL */
-#home-bg {
-  background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg');
-  background-size:cover;
-  background-position:center;
-  width:100vw;
-  height:100vh;
-  position:relative;
-}
-#home-bg::before {
-  content:"";
-  position:absolute;
-  inset:0;
-  background-color: rgba(0,0,0,0.5);
-}
-#home-content {
-  position:relative;
-  z-index:10;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  color:white;
-  padding:0 1rem; /* pour mobile */
-}
-#home h1 { font-size:4rem; font-weight:800; line-height:1.2; }
-#home p { margin-top:1rem; font-size:1.25rem; max-width:700px; }
-#home button { margin-top:2rem; padding:0.75rem 2rem; font-weight:bold; border-radius:0.5rem; cursor:pointer; transition:0.3s; background:white; color:black; }
-#home button:hover { background:rgba(255,255,255,0.8); }
+  /* NAVBAR */
+  nav { width:100%; background:black; color:white; position:fixed; z-index:20; top:0; left:0; }
+  nav img { height:40px; }
 
-  main section { padding-left:1rem; padding-right:1rem; margin-top:2rem; }
-
-  /* PILOTES */
-  .driver {
-    border:1px solid #ddd;
-    border-radius:8px;
-    padding:6px;
-    text-align:center;
-    cursor:pointer;
-    background:white;
-    transition: transform 0.2s;
+  /* HOME */
+  #home-bg {
+    background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg');
+    background-size:cover;
+    background-position:center;
+    width:100vw;
+    height:100vh;
+    position:relative;
   }
-  .driver:hover { transform: scale(1.05); }
-
-  /* CALENDRIER */
-  .gp-card {
-    position: relative;
-    background-size: cover;
-    background-position: center;
-    border-radius:12px;
-    cursor:pointer;
-    overflow: hidden;
-    height:0;
-    padding-bottom:65%; /* proportion 753x494 */
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
-    text-align:center;
-    color:white;
-  }
-  .gp-overlay {
+  #home-bg::before {
+    content:"";
     position:absolute;
     inset:0;
     background-color: rgba(0,0,0,0.5);
-    transition: background-color 0.3s;
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
-    padding-bottom:12px;
   }
-  .gp-card:hover .gp-overlay { background-color: rgba(0,0,0,0.2); }
-  .gp-text {
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
-    font-weight:bold;
-  }
-  .live-badge {
-    position:absolute;
-    top:8px;
-    left:8px;
-    background:red;
-    color:white;
-    padding:2px 6px;
-    font-size:12px;
-    font-weight:bold;
-    border-radius:4px;
+  #home-content {
+    position:relative;
     z-index:10;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:white;
+    padding:0 1rem;
   }
+  #home h1 { font-size:4rem; font-weight:800; line-height:1.2; }
+  #home p { margin-top:1rem; font-size:1.25rem; max-width:700px; }
+  #home button { margin-top:2rem; padding:0.75rem 2rem; font-weight:bold; border-radius:0.5rem; cursor:pointer; transition:0.3s; background:white; color:black; }
+  #home button:hover { background:rgba(255,255,255,0.8); }
+
+  /* SECTIONS HORS ACCUEIL */
+  main section { display:none; padding:3rem 2rem; }
+  main section.active { display:block; }
+
+  /* FOOTER */
+  footer { background:black; color:white; padding:1.5rem 2rem; text-align:center; margin-top:auto; }
 </style>
 </head>
-<body class="bg-white text-black">
+<body>
 
 <!-- NAVBAR -->
-<nav class="w-full bg-black text-white shadow fixed z-20">
-<div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-<div class="flex items-center gap-3">
-<img src="https://i.postimg.cc/QdTyXmTH/4.png" alt="Logo F1 DriveX" class="h-10"/>
-<div><div class="text-lg font-bold">F1 DriveX</div><div class="text-xs opacity-80">Un Championnat signé DriveX Official</div></div>
-</div>
-<div class="hidden md:flex gap-4">
-<button onclick="showPage('home', this)" class="nav-btn">Accueil</button>
-<button onclick="showPage('pilotes', this)" class="nav-btn">Pilotes</button>
-<button onclick="showPage('calendrier', this)" class="nav-btn">Calendrier</button>
-<button onclick="showPage('reglements', this)" class="nav-btn">Règlements</button>
-<button onclick="showPage('contact', this)" class="nav-btn">Contact</button>
-</div>
-<div class="md:hidden">
-<select onchange="showPage(this.value)" class="rounded-md px-2 py-1 text-black">
-<option value="home">Accueil</option>
-<option value="pilotes">Pilotes</option>
-<option value="calendrier">Calendrier</option>
-<option value="reglements">Règlements</option>
-<option value="contact">Contact</option>
-</select>
-</div>
-</div>
+<nav class="w-full shadow fixed z-20">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://i.postimg.cc/QdTyXmTH/4.png" alt="Logo F1 DriveX" class="h-10"/>
+      <div>
+        <div class="text-lg font-bold">F1 DriveX</div>
+        <div class="text-xs opacity-80">Un Championnat signé DriveX Official</div>
+      </div>
+    </div>
+    <div class="hidden md:flex gap-4">
+      <button onclick="showPage('home', this)" class="nav-btn active-link">Accueil</button>
+      <button onclick="showPage('pilotes', this)" class="nav-btn">Pilotes</button>
+      <button onclick="showPage('calendrier', this)" class="nav-btn">Calendrier</button>
+      <button onclick="showPage('reglements', this)" class="nav-btn">Règlements</button>
+      <button onclick="showPage('contact', this)" class="nav-btn">Contact</button>
+    </div>
+    <div class="md:hidden">
+      <select onchange="showPage(this.value)" class="rounded-md px-2 py-1 text-black">
+        <option value="home">Accueil</option>
+        <option value="pilotes">Pilotes</option>
+        <option value="calendrier">Calendrier</option>
+        <option value="reglements">Règlements</option>
+        <option value="contact">Contact</option>
+      </select>
+    </div>
+  </div>
 </nav>
 
-<main class="pt-[70px]">
+<main class="pt-[70px] flex-1">
 
-<!-- HOME -->
-<section id="home">
-<div id="home-bg">
-<div id="home-content">
-<h1 class="text-5xl font-extrabold mt-0">Bienvenue chez F1 DriveX</h1>
-<p class="mt-4 text-xl max-w-2xl">Plongez au cœur du championnat F1 DriveX, vivez chaque dépassement et chaque podium avec passion et adrénaline.</p>
-<button onclick="showPage('pilotes')" class="mt-8 px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200">Découvrir les pilotes</button>
-</div>
-</div>
-</section>
+  <!-- HOME -->
+  <section id="home" class="active">
+    <div id="home-bg">
+      <div id="home-content">
+        <h1>Bienvenue chez F1 DriveX</h1>
+        <p>Plongez au cœur du championnat F1 DriveX, vivez chaque dépassement et chaque podium avec passion et adrénaline.</p>
+        <button onclick="showPage('pilotes')">Découvrir les pilotes</button>
+      </div>
+    </div>
+  </section>
+  <!-- PILOTES -->
+  <section id="pilotes">
+    <h2 class="text-2xl font-bold mb-2">Nos Pilotes 2025</h2>
+    <input id="pilotSearch" type="text" placeholder="Rechercher..." class="px-3 py-2 border rounded-md w-full mb-4"/>
+    <div id="pilotList" class="grid md:grid-cols-4 gap-4"></div>
+  </section>
 
-<!-- PILOTES -->
-<section id="pilotes" class="hidden-section">
-<h2 class="text-2xl font-bold mb-2">Nos Pilotes 2025</h2>
-<input id="pilotSearch" type="text" placeholder="Rechercher..." class="px-3 py-2 border rounded-md w-full mb-4"/>
-<div id="pilotList" class="grid md:grid-cols-4 gap-4"></div>
-</section>
+  <!-- CALENDRIER -->
+  <section id="calendrier">
+    <h2 class="text-2xl font-bold mb-2">Calendrier 2025</h2>
+    <div id="calendarList" class="grid md:grid-cols-4 gap-4"></div>
+  </section>
 
-<!-- CALENDRIER -->
-<section id="calendrier" class="hidden-section">
-<h2 class="text-2xl font-bold">Calendrier 2025</h2>
-<div class="mt-4 grid md:grid-cols-4 gap-4" id="calendarList"></div>
-</section>
+  <!-- REGLEMENTS -->
+  <section id="reglements">
+    <h2 class="text-2xl font-bold mb-2">Règlements</h2>
+    <div class="mt-4 grid md:grid-cols-2 gap-4">
+      <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement sportif</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+      <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement technique</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+    </div>
+  </section>
 
-<!-- REGLEMENTS -->
-<section id="reglements" class="hidden-section">
-<h2 class="text-2xl font-bold">Règlements</h2>
-<div class="mt-4 grid md:grid-cols-2 gap-4">
-<div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement sportif</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
-<div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement technique</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
-</div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="hidden-section">
-<h2 class="text-2xl font-bold mb-4">Contact</h2>
-<div class="grid md:grid-cols-2 gap-4">
-<div class="p-4 border rounded-lg"><h4 class="font-semibold">Organisation</h4><p>Email: contact@drivex.example</p></div>
-<div class="p-4 border rounded-lg"><h4 class="font-semibold">Bureau sportif</h4><p>Email: sport@drivex.example</p></div>
-</div>
-</section>
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2 class="text-2xl font-bold mb-4">Contact</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="p-4 border rounded-lg"><h4 class="font-semibold">Organisation</h4><p>Email: contact@drivex.example</p></div>
+      <div class="p-4 border rounded-lg"><h4 class="font-semibold">Bureau sportif</h4><p>Email: sport@drivex.example</p></div>
+    </div>
+  </section>
 
 </main>
+
 <!-- FOOTER -->
-<footer class="mt-auto py-6 bg-black text-white">
-  <div class="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm">
+<footer>
+  <div class="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto gap-2">
     <div class="flex items-center gap-2">
       <img src="https://i.postimg.cc/yxGLK36m/3.png" alt="Logo F1 DriveX blanc" class="h-6"/>
       <span>© <span id="year"></span> F1 DriveX — Association DriveX</span>
@@ -192,28 +144,12 @@
   </div>
 </footer>
 
-<!-- MODAL PILOTE -->
-<div id="pilotModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
-  <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
-    <button onclick="closeModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
-<!-- MODAL GP -->
-<div id="gpModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
-  <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
-    <button onclick="closeGPModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
-    <div id="gpContent"></div>
-  </div>
-</div>
-
 <script>
 document.getElementById("year").textContent = new Date().getFullYear();
 
 function showPage(id, btn){
-  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden-section"));
-  document.getElementById(id).classList.remove("hidden-section");
+  document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
   document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active-link"));
   if(btn) btn.classList.add("active-link");
 }
@@ -238,21 +174,29 @@ function renderPilots(){
     let div=document.createElement("div");
     div.className="driver";
     div.innerHTML=`<img src="${p.photo}" class="w-24 h-24 mx-auto rounded-full object-cover mb-2"/><p class='font-semibold'>${p.prenom} ${p.nom}</p><p>${p.ecurie}</p>`;
-    div.onclick=()=>openModal(p);
     pilotList.appendChild(div);
   });
 }
 document.getElementById("pilotSearch").oninput=renderPilots;
 renderPilots();
+</script>
+<!-- MODAL PILOTE -->
+<div id="pilotModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+  <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+    <button onclick="closeModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
 
-function openModal(p){
-  const content=document.getElementById("modalContent");
-  content.innerHTML=`<div class='flex gap-4'><img src="${p.photo}" class="w-24 h-24 rounded-full object-cover"/><div><h3 class='text-xl font-bold'>${p.prenom} ${p.nom}</h3><p>Écurie : ${p.ecurie}</p><p>Numéro : ${p.numero}</p><p>Nationalité : ${p.nationalite}</p></div></div><p class='mt-4 text-sm'>${p.bio}</p>`;
-  document.getElementById("pilotModal").classList.remove("hidden");
-  document.getElementById("pilotModal").classList.add("flex");
-}
-function closeModal(){document.getElementById("pilotModal").classList.add("hidden");}
+<!-- MODAL GP -->
+<div id="gpModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+  <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+    <button onclick="closeGPModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
+    <div id="gpContent"></div>
+  </div>
+</div>
 
+<script>
 // CALENDRIER 8 GP
 const races=[
   {date:"2025-09-14",title:"Grand Prix de Bahreïn",img:"https://upload.wikimedia.org/wikipedia/commons/5/5a/Bahrain_International_Circuit.png",heure:"14:09",twitch:"https://www.twitch.tv/drivex_off",desc:"Le GP de Bahreïn sur circuit moderne."},
@@ -288,6 +232,285 @@ function renderRaces(){
 }
 renderRaces();
 
+// MODALS
+function openModal(p){
+  const content=document.getElementById("modalContent");
+  content.innerHTML=`<div class='flex gap-4'><img src="${p.photo}" class="w-24 h-24 rounded-full object-cover"/><div><h3 class='text-xl font-bold'>${p.prenom} ${p.nom}</h3><p>Écurie : ${p.ecurie}</p><p>Numéro : ${p.numero}</p><p>Nationalité : ${p.nationalite}</p></div></div><p class='mt-4 text-sm'>${p.bio}</p>`;
+  document.getElementById("pilotModal").classList.remove("hidden");
+  document.getElementById("pilotModal").classList.add("flex");
+}
+function closeModal(){document.getElementById("pilotModal").classList.add("hidden");}
+
+function openGPModal(r){
+  const content=document.getElementById("gpContent");
+  content.innerHTML=`<h3 class='text-xl font-bold mb-2'>${r.title}</h3>
+  <p>Date : ${new Date(r.date).toLocaleDateString('fr-FR')} à ${r.heure}</p>
+  <p>${r.desc}</p>
+  <p class="mt-2">Regardez en direct sur <a href="${r.twitch}" target="_blank" class="text-blue-600 underline">Twitch DriveX</a></p>`;
+  document.getElementById("gpModal").classList.remove("hidden");
+  document.getElementById("gpModal").classList.add("flex");
+}
+function closeGPModal(){document.getElementById("gpModal").classList.add("hidden");}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>F1 DriveX — Site officiel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; overflow-x:hidden; background:black; }
+  body { display:flex; flex-direction:column; min-height:100vh; font-family:sans-serif; }
+
+  /* NAVBAR */
+  nav { width:100%; background:black; color:white; position:fixed; z-index:20; top:0; left:0; }
+  nav img { height:40px; }
+
+  /* HOME */
+  #home-bg {
+    background-image:url('https://f1only.fr/wp-content/uploads/2021/01/ErrYhThXIAAct8d.jpg');
+    background-size:cover;
+    background-position:center;
+    width:100vw;
+    height:100vh;
+    position:relative;
+  }
+  #home-bg::before {
+    content:"";
+    position:absolute;
+    inset:0;
+    background-color: rgba(0,0,0,0.5);
+  }
+  #home-content {
+    position:relative;
+    z-index:10;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    color:white;
+    padding:0 1rem;
+  }
+  #home h1 { font-size:4rem; font-weight:800; line-height:1.2; }
+  #home p { margin-top:1rem; font-size:1.25rem; max-width:700px; }
+  #home button { margin-top:2rem; padding:0.75rem 2rem; font-weight:bold; border-radius:0.5rem; cursor:pointer; transition:0.3s; background:white; color:black; }
+  #home button:hover { background:rgba(255,255,255,0.8); }
+
+  /* SECTIONS HORS ACCUEIL */
+  main section { display:none; padding:3rem 2rem; }
+  main section.active { display:block; }
+
+  /* PILOTES */
+  .driver { border:1px solid #ddd; border-radius:8px; padding:6px; text-align:center; cursor:pointer; background:white; transition: transform 0.2s; }
+  .driver:hover { transform: scale(1.05); }
+
+  /* CALENDRIER */
+  .gp-card { position: relative; background-size: cover; background-position: center; border-radius:12px; cursor:pointer; overflow: hidden; height:0; padding-bottom:65%; display:flex; align-items:flex-end; justify-content:center; text-align:center; color:white; }
+  .gp-overlay { position:absolute; inset:0; background-color: rgba(0,0,0,0.5); transition: background-color 0.3s; display:flex; align-items:flex-end; justify-content:center; padding-bottom:12px; }
+  .gp-card:hover .gp-overlay { background-color: rgba(0,0,0,0.2); }
+  .gp-text { text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight:bold; }
+  .live-badge { position:absolute; top:8px; left:8px; background:red; color:white; padding:2px 6px; font-size:12px; font-weight:bold; border-radius:4px; z-index:10; }
+
+  /* FOOTER */
+  footer { background:black; color:white; padding:1.5rem 2rem; text-align:center; margin-top:auto; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="w-full shadow fixed z-20">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="https://i.postimg.cc/QdTyXmTH/4.png" alt="Logo F1 DriveX" class="h-10"/>
+      <div>
+        <div class="text-lg font-bold">F1 DriveX</div>
+        <div class="text-xs opacity-80">Un Championnat signé DriveX Official</div>
+      </div>
+    </div>
+    <div class="hidden md:flex gap-4">
+      <button onclick="showPage('home', this)" class="nav-btn active-link">Accueil</button>
+      <button onclick="showPage('pilotes', this)" class="nav-btn">Pilotes</button>
+      <button onclick="showPage('calendrier', this)" class="nav-btn">Calendrier</button>
+      <button onclick="showPage('reglements', this)" class="nav-btn">Règlements</button>
+      <button onclick="showPage('contact', this)" class="nav-btn">Contact</button>
+    </div>
+    <div class="md:hidden">
+      <select onchange="showPage(this.value)" class="rounded-md px-2 py-1 text-black">
+        <option value="home">Accueil</option>
+        <option value="pilotes">Pilotes</option>
+        <option value="calendrier">Calendrier</option>
+        <option value="reglements">Règlements</option>
+        <option value="contact">Contact</option>
+      </select>
+    </div>
+  </div>
+</nav>
+
+<main class="pt-[70px] flex-1">
+
+  <!-- HOME -->
+  <section id="home" class="active">
+    <div id="home-bg">
+      <div id="home-content">
+        <h1>Bienvenue chez F1 DriveX</h1>
+        <p>Plongez au cœur du championnat F1 DriveX, vivez chaque dépassement et chaque podium avec passion et adrénaline.</p>
+        <button onclick="showPage('pilotes')">Découvrir les pilotes</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILOTES -->
+  <section id="pilotes">
+    <h2 class="text-2xl font-bold mb-2">Nos Pilotes 2025</h2>
+    <input id="pilotSearch" type="text" placeholder="Rechercher..." class="px-3 py-2 border rounded-md w-full mb-4"/>
+    <div id="pilotList" class="grid md:grid-cols-4 gap-4"></div>
+  </section>
+
+  <!-- CALENDRIER -->
+  <section id="calendrier">
+    <h2 class="text-2xl font-bold mb-2">Calendrier 2025</h2>
+    <div id="calendarList" class="grid md:grid-cols-4 gap-4"></div>
+  </section>
+
+  <!-- REGLEMENTS -->
+  <section id="reglements">
+    <h2 class="text-2xl font-bold mb-2">Règlements</h2>
+    <div class="mt-4 grid md:grid-cols-2 gap-4">
+      <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement sportif</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+      <div class="p-4 border rounded-lg"><h4 class="font-semibold">Règlement technique</h4><p class="text-sm mt-2">Version : 2025-01-01</p></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <h2 class="text-2xl font-bold mb-4">Contact</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="p-4 border rounded-lg"><h4 class="font-semibold">Organisation</h4><p>Email: contact@drivex.example</p></div>
+      <div class="p-4 border rounded-lg"><h4 class="font-semibold">Bureau sportif</h4><p>Email: sport@drivex.example</p></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="flex flex-col md:flex-row items-center justify-between max-w-6xl mx-auto gap-2">
+    <div class="flex items-center gap-2">
+      <img src="https://i.postimg.cc/yxGLK36m/3.png" alt="Logo F1 DriveX blanc" class="h-6"/>
+      <span>© <span id="year"></span> F1 DriveX — Association DriveX</span>
+    </div>
+    <div class="flex gap-4">
+      <a href="#">Mentions légales</a>
+      <a href="#">Confidentialité</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODALS PILOTE ET GP -->
+<div id="pilotModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+  <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+    <button onclick="closeModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<div id="gpModal" class="fixed inset-0 hidden items-center justify-center bg-black/70 z-50">
+  <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+    <button onclick="closeGPModal()" class="absolute top-2 right-2 text-black font-bold">✕</button>
+    <div id="gpContent"></div>
+  </div>
+</div>
+
+<script>
+// YEAR
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// NAVIGATION
+function showPage(id, btn){
+  document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active-link"));
+  if(btn) btn.classList.add("active-link");
+}
+
+// PILOTES
+const pilots=[
+  {prenom:"Max",nom:"Verstappen",ecurie:"Red Bull Racing",numero:1,nationalite:"Néerlandaise",bio:"Champion du monde 2024, pilote dominant.",photo:"https://media.redbull.com/images/c_limit,w_400,h_400,f_auto,q_auto/redbullcom/2025/max-verstappen.jpg"},
+  {prenom:"Sergio",nom:"Pérez",ecurie:"Red Bull Racing",numero:11,nationalite:"Mexicaine",bio:"Pilote expérimenté et fiable en course.",photo:"https://media.redbull.com/images/c_limit,w_400,h_400,f_auto,q_auto/redbullcom/2025/sergio-perez.jpg"},
+  {prenom:"Lewis",nom:"Hamilton",ecurie:"Mercedes",numero:44,nationalite:"Britannique",bio:"7 fois champion du monde, pilote rapide et stratégique.",photo:"https://media.mercedesamgf1.com/hamilton.jpg"},
+  {prenom:"George",nom:"Russell",ecurie:"Mercedes",numero:63,nationalite:"Britannique",bio:"Pilote talentueux, rapide et régulier.",photo:"https://media.mercedesamgf1.com/russell.jpg"},
+  {prenom:"Charles",nom:"Leclerc",ecurie:"Ferrari",numero:16,nationalite:"Monégasque",bio:"Leader de Ferrari et pilote très agressif.",photo:"https://media.ferrari.com/leclerc.jpg"},
+  {prenom:"Carlos",nom:"Sainz",ecurie:"Ferrari",numero:55,nationalite:"Espagnole",bio:"Pilote précis et régulier pour Ferrari.",photo:"https://media.ferrari.com/sainz.jpg"},
+  {prenom:"Lando",nom:"Norris",ecurie:"McLaren",numero:4,nationalite:"Britannique",bio:"Pilote rapide et spectaculaire.",photo:"https://media.mclaren.com/norris.jpg"},
+  {prenom:"Oscar",nom:"Piastri",ecurie:"McLaren",numero:81,nationalite:"Australienne",bio:"Jeune talent prometteur.",photo:"https://media.mclaren.com/piastri.jpg"}
+];
+
+const pilotList=document.getElementById("pilotList");
+function renderPilots(){
+  const query=document.getElementById("pilotSearch").value.toLowerCase();
+  pilotList.innerHTML="";
+  pilots.filter(p=>p.prenom.toLowerCase().includes(query)||p.nom.toLowerCase().includes(query)).forEach(p=>{
+    let div=document.createElement("div");
+    div.className="driver";
+    div.innerHTML=`<img src="${p.photo}" class="w-24 h-24 mx-auto rounded-full object-cover mb-2"/><p class='font-semibold'>${p.prenom} ${p.nom}</p><p>${p.ecurie}</p>`;
+    div.onclick=()=>openModal(p);
+    pilotList.appendChild(div);
+  });
+}
+document.getElementById("pilotSearch").oninput=renderPilots;
+renderPilots();
+
+// MODALS PILOTE
+function openModal(p){
+  const content=document.getElementById("modalContent");
+  content.innerHTML=`<div class='flex gap-4'><img src="${p.photo}" class="w-24 h-24 rounded-full object-cover"/><div><h3 class='text-xl font-bold'>${p.prenom} ${p.nom}</h3><p>Écurie : ${p.ecurie}</p><p>Numéro : ${p.numero}</p><p>Nationalité : ${p.nationalite}</p></div></div><p class='mt-4 text-sm'>${p.bio}</p>`;
+  document.getElementById("pilotModal").classList.remove("hidden");
+  document.getElementById("pilotModal").classList.add("flex");
+}
+function closeModal(){document.getElementById("pilotModal").classList.add("hidden");}
+
+// CALENDRIER GP
+const races=[
+  {date:"2025-09-14",title:"Grand Prix de Bahreïn",img:"https://upload.wikimedia.org/wikipedia/commons/5/5a/Bahrain_International_Circuit.png",heure:"14:09",twitch:"https://www.twitch.tv/drivex_off",desc:"Le GP de Bahreïn sur circuit moderne."},
+  {date:"2025-03-23",title:"Grand Prix d'Arabie Saoudite",img:"https://upload.wikimedia.org/wikipedia/commons/3/33/Jeddah_Circuit.png",heure:"20:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Course nocturne spectaculaire."},
+  {date:"2025-04-06",title:"Grand Prix d'Australie",img:"https://upload.wikimedia.org/wikipedia/commons/7/79/Melbourne_GP.png",heure:"07:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Début de la saison sur le circuit de Melbourne."},
+  {date:"2025-04-20",title:"Grand Prix d'Emilie-Romagne",img:"https://upload.wikimedia.org/wikipedia/commons/2/2f/Imola_Circuit.png",heure:"14:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Course italienne historique."},
+  {date:"2025-05-04",title:"Grand Prix de Miami",img:"https://upload.wikimedia.org/wikipedia/commons/1/1a/Miami_GP.png",heure:"20:30",twitch:"https://www.twitch.tv/drivex_off",desc:"Nouvelle étape aux USA."},
+  {date:"2025-05-18",title:"Grand Prix d'Espagne",img:"https://upload.wikimedia.org/wikipedia/commons/a/a3/Circuit_de_Catalunya.png",heure:"15:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Course sur le circuit de Barcelone."},
+  {date:"2025-06-01",title:"Grand Prix de Monaco",img:"https://upload.wikimedia.org/wikipedia/commons/9/99/Monaco_GP.png",heure:"14:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Circuit urbain mythique."},
+  {date:"2025-06-15",title:"Grand Prix du Canada",img:"https://upload.wikimedia.org/wikipedia/commons/5/53/Circuit_Gilles_Villeneuve.png",heure:"20:00",twitch:"https://www.twitch.tv/drivex_off",desc:"Course sur le circuit de Montréal."}
+];
+
+const cal=document.getElementById("calendarList");
+function renderRaces(){
+  cal.innerHTML="";
+  const now=new Date();
+  races.forEach(r=>{
+    let div=document.createElement("div");
+    div.className="gp-card";
+    div.style.backgroundImage=`url('${r.img}')`;
+
+    const raceDateTime=new Date(r.date+"T"+r.heure);
+    let liveBadge='';
+    if(now >= raceDateTime && now <= new Date(raceDateTime.getTime()+2*60*60*1000)){
+      div.style.border="3px solid red";
+      liveBadge='<div class="live-badge">LIVE</div>';
+    }
+
+    div.innerHTML=`${liveBadge}<div class="gp-overlay"><div class="gp-text">${r.title}<br>${new Date(r.date).toLocaleDateString('fr-FR')}</div></div>`;
+    div.onclick=()=>openGPModal(r);
+    cal.appendChild(div);
+  });
+}
+renderRaces();
+
+// MODAL GP
 function openGPModal(r){
   const content=document.getElementById("gpContent");
   content.innerHTML=`<h3 class='text-xl font-bold mb-2'>${r.title}</h3>
@@ -299,7 +522,6 @@ function openGPModal(r){
 }
 function closeGPModal(){document.getElementById("gpModal").classList.add("hidden");}
 
-showPage("home", document.querySelector(".nav-btn"));
 </script>
 </body>
 </html>
