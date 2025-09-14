@@ -206,23 +206,91 @@ function openModal(p){
 }
 function closeModal(){document.getElementById("pilotModal").classList.add("hidden");}
 
-// CALENDRIER 2025
-const races=[
-{date:"2025-03-17", title:"Grand Prix d'Australie", country:"Australie", heure:"07:00", img:"https://www.autohebdo.fr/app/uploads/2025/03/DPPI_00124004_986-1-753x494.jpg", desc:"Circuit Albert Park, Melbourne"},
-{date:"2025-03-31", title:"Grand Prix de Bahreïn", country:"Bahreïn", heure:"18:00", img:"https://www.autohebdo.fr/app/uploads/2024/02/DPPI_00124001_1408-753x494.jpg", desc:"Circuit International de Sakhir"},
-{date:"2025-04-14", title:"Grand Prix de Chine", country:"Chine", heure:"08:00", img:"https://upload.wikimedia.org/wikipedia/commons/6/68/Shanghai_International_Circuit.svg", desc:"Circuit International de Shanghai"},
-{date:"2025-04-28", title:"Grand Prix d'Azerbaïdjan", country:"Azerbaïdjan", heure:"14:00", img:"https://upload.wikimedia.org/wikipedia/commons/1/11/Baku_City_Circuit.svg", desc:"Circuit urbain de Bakou"}
-];
-// ... tu peux compléter le calendrier complet 2025 ici
+<!-- CALENDRIER -->
+<section id="calendrier" class="hidden-section">
+  <h2 class="text-2xl font-bold mb-4">Calendrier 2025</h2>
+  <div class="mt-4 grid md:grid-cols-2 gap-4" id="calendarList"></div>
+</section>
 
-const cal=document.getElementById("calendarList");
-races.forEach(r=>{
-  let div=document.createElement("div");
-  div.className="race";
-  div.innerHTML=`<img src="${r.img}" alt="${r.title}"/><p class="font-bold mt-2">${r.title}</p><p>${r.date}</p>`;
-  div.onclick=()=>openGPModal(r);
-  cal.appendChild(div);
-});
+<style>
+  /* Boutons GP plein écran avec effet sombre */
+  .race {
+    position: relative;
+    border-radius: 12px;
+    height: 200px;
+    cursor: pointer;
+    overflow: hidden;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    transition: filter 0.3s;
+    filter: brightness(50%);
+  }
+  .race:hover {
+    filter: brightness(100%);
+  }
+  .race-text {
+    position: relative;
+    z-index: 10;
+    padding: 0 10px;
+  }
+</style>
+
+<script>
+  const races=[
+    {date:"2025-03-09",title:"Grand Prix de Bahreïn",country:"Bahreïn",heure:"18:00",desc:"Circuit international de Bahreïn",img:"https://upload.wikimedia.org/wikipedia/commons/2/2b/Bahrain_International_Circuit_2017.png"},
+    {date:"2025-03-23",title:"Grand Prix d'Arabie Saoudite",country:"Arabie Saoudite",heure:"20:30",desc:"Circuit urbain de Djeddah",img:"https://upload.wikimedia.org/wikipedia/commons/3/3b/Jeddah_Corniche_Circuit.png"},
+    {date:"2025-03-30",title:"Grand Prix d'Australie",country:"Australie",heure:"06:00",desc:"Circuit de Melbourne",img:"https://upload.wikimedia.org/wikipedia/commons/f/f4/Melbourne_Grand_Prix_Circuit.png"},
+    {date:"2025-04-20",title:"Grand Prix d'Azerbaïdjan",country:"Azerbaïdjan",heure:"14:00",desc:"Circuit urbain de Bakou",img:"https://upload.wikimedia.org/wikipedia/commons/4/44/Baku_City_Circuit.png"},
+    {date:"2025-05-04",title:"Grand Prix de Miami",country:"USA",heure:"19:30",desc:"Circuit urbain de Miami",img:"https://upload.wikimedia.org/wikipedia/commons/7/74/Miami_GP.png"},
+    {date:"2025-05-11",title:"Grand Prix d'Emilie-Romagne",country:"Italie",heure:"15:00",desc:"Circuit d'Imola",img:"https://upload.wikimedia.org/wikipedia/commons/1/14/Imola_Circuit.png"},
+    {date:"2025-05-25",title:"Grand Prix de Monaco",country:"Monaco",heure:"15:00",desc:"Circuit urbain de Monaco",img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Monaco_Grand_Prix_Circuit.png"},
+    {date:"2025-06-01",title:"Grand Prix d'Espagne",country:"Espagne",heure:"15:00",desc:"Circuit de Barcelone-Catalogne",img:"https://upload.wikimedia.org/wikipedia/commons/0/01/Circuit_Catalunya.png"},
+    {date:"2025-06-15",title:"Grand Prix du Canada",country:"Canada",heure:"20:00",desc:"Circuit Gilles Villeneuve",img:"https://upload.wikimedia.org/wikipedia/commons/6/63/Circuit_Gilles_Villeneuve.png"},
+    {date:"2025-06-29",title:"Grand Prix d'Autriche",country:"Autriche",heure:"15:00",desc:"Red Bull Ring",img:"https://upload.wikimedia.org/wikipedia/commons/7/7f/Red_Bull_Ring_layout.png"},
+    {date:"2025-07-06",title:"Grand Prix de Grande-Bretagne",country:"Royaume-Uni",heure:"16:00",desc:"Silverstone Circuit",img:"https://upload.wikimedia.org/wikipedia/commons/e/e5/Silverstone_Circuit.png"},
+    {date:"2025-07-20",title:"Grand Prix de Hongrie",country:"Hongrie",heure:"15:00",desc:"Hungaroring",img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/Hungaroring.png"},
+    {date:"2025-07-27",title:"Grand Prix de Belgique",country:"Belgique",heure:"15:00",desc:"Circuit de Spa-Francorchamps",img:"https://upload.wikimedia.org/wikipedia/commons/f/f2/Spa-Francorchamps_Circuit.png"},
+    {date:"2025-08-31",title:"Grand Prix des Pays-Bas",country:"Pays-Bas",heure:"15:00",desc:"Circuit de Zandvoort",img:"https://upload.wikimedia.org/wikipedia/commons/f/f8/Zandvoort_Circuit.png"},
+    {date:"2025-09-07",title:"Grand Prix d'Italie",country:"Italie",heure:"15:00",desc:"Circuit de Monza",img:"https://upload.wikimedia.org/wikipedia/commons/8/8d/Monza_Circuit.png"},
+    {date:"2025-09-21",title:"Grand Prix de Singapour",country:"Singapour",heure:"20:00",desc:"Circuit urbain de Singapour",img:"https://upload.wikimedia.org/wikipedia/commons/5/50/Singapore_Street_Circuit.png"},
+    {date:"2025-10-05",title:"Grand Prix du Japon",country:"Japon",heure:"07:00",desc:"Suzuka Circuit",img:"https://upload.wikimedia.org/wikipedia/commons/0/0f/Suzuka_Circuit.png"},
+    {date:"2025-10-19",title:"Grand Prix des États-Unis",country:"USA",heure:"20:30",desc:"Circuit des Amériques",img:"https://upload.wikimedia.org/wikipedia/commons/5/5f/Circuit_of_the_Americas.png"},
+    {date:"2025-10-26",title:"Grand Prix du Mexique",country:"Mexique",heure:"20:00",desc:"Autodromo Hermanos Rodriguez",img:"https://upload.wikimedia.org/wikipedia/commons/3/35/Autodromo_Hermanos_Rodriguez.png"},
+    {date:"2025-11-09",title:"Grand Prix du Brésil",country:"Brésil",heure:"17:00",desc:"Interlagos",img:"https://upload.wikimedia.org/wikipedia/commons/7/79/Interlagos_Circuit.png"},
+    {date:"2025-11-23",title:"Grand Prix d'Abou Dhabi",country:"Émirats arabes unis",heure:"15:00",desc:"Yas Marina Circuit",img:"https://upload.wikimedia.org/wikipedia/commons/c/c7/Yas_Marina_Circuit.png"}
+  ];
+
+  function renderRaces(){
+    cal.innerHTML="";
+    races.forEach(r=>{
+      let div=document.createElement("div");
+      div.className="race";
+      div.style.backgroundImage = `url('${r.img}')`;
+      div.innerHTML=`<div class='race-text'><p>${r.title}</p><p>${new Date(r.date).toLocaleDateString("fr-FR")}</p></div>`;
+      div.onclick=()=>openGPModal(r);
+      cal.appendChild(div);
+    });
+  }
+  renderRaces();
+
+  function openGPModal(r){
+    const content=document.getElementById("gpContent");
+    content.innerHTML=`<h3 class='text-xl font-bold mb-2'>${r.title}</h3>
+      <p>Date : ${new Date(r.date).toLocaleDateString("fr-FR")}</p>
+      <p>Heure : ${r.heure}</p>
+      <p>${r.desc}</p>`;
+    document.getElementById("gpModal").classList.remove("hidden");
+    document.getElementById("gpModal").classList.add("flex");
+  }
+  function closeGPModal(){document.getElementById("gpModal").classList.add("hidden");}
+</script>
+
 
 // MODAL GP
 function openGPModal(r){
