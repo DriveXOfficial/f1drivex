@@ -202,7 +202,7 @@ function renderPilots(){
   pilots.filter(p=>p.prenom.toLowerCase().includes(query)||p.nom.toLowerCase().includes(query)).forEach(p=>{
     let div=document.createElement("div");
     div.className="driver";
-    div.innerHTML=`<img src="${p.photo}" class="w-24 h-24 mx-auto rounded-full object-cover mb-2"/><p class='font-semibold'>${p.prenom} ${p.nom}</p><p>${p.ecurie}</p>`;
+    div.innerHTML = `<p class='font-semibold'>${p.prenom} ${p.nom}</p><p>${p.ecurie}</p>`;
     div.onclick=()=>openModal(p);
     pilotList.appendChild(div);
   });
